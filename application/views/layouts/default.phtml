@@ -2,8 +2,77 @@
 <html lang="ru">
     <head>
         <meta charset="UTF-8">
+        <link href="<?=$this->baseUrl('css/bootstrap.min.css') ?>" rel="stylesheet" type="text/css">
+        <link href="<?=$this->baseUrl('css/bootstrap-theme.min.css') ?>" rel="stylesheet" type="text/css">
+        <style>
+            body {
+                padding-top: 70px;
+            }
+        </style>
     </head>
     <body>
-        <?=$content ?>
+        <a href="#content" class="sr-only">Skip to content</a>
+
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Wimta Framework</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#">Главная</a></li>
+                        <li><a href="#">Быстрый старт</a></li>
+                        <li><a href="#">Структура</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">API <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Library</a></li>
+                                <li><a href="#">Helpers</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" title="GitHub">
+                                <img
+                                    src="<?=$this->baseUrl('images/glyphicons_social_21_github.png') ?>"
+                                    class="img-responsive"
+                                    />
+                            </a>
+                        </li>
+                    </ul>
+                </div><!--/.nav-collapse -->
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="jumbotron">
+                <div class="row">
+                    <div class="col-md-3">
+                        <img class="" src="<?=$this->baseUrl('images/cat_laptop.png') ?>" />
+                    </div>
+                    <div class="col-md-8 col-md-offset-1">
+                        <h1>Wimta Framework</h1>
+                        <p>Text with framework description</p>
+                        <p>
+                            <a class="btn btn-lg btn-primary" href="#">Free download &raquo;</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div id="content" class="row">
+                <div class="col-md-12">
+                    <?=$content ?>
+                </div>
+            </div>
+
+        </div>
+        <script src="//code.jquery.com/jquery.js"></script>
+        <script src="<?=$this->baseUrl('js/bootstrap.min.js') ?>"></script>
     </body>
 </html>

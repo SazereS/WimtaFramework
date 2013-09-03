@@ -11,7 +11,7 @@ class Library_Application{
     private $_router;
     private $_controller;
     private $_helpers;
-    public  $options = array();
+    private $_settings;
 
     // PRIVATE METHODS
 
@@ -39,15 +39,6 @@ class Library_Application{
     }
 
     public function run(){
-        $this->_options = parse_ini_file(
-                APPLICATION_PATH
-                . DIRECTORY_SEPARATOR
-                . 'config'
-                . DIRECTORY_SEPARATOR
-                . $this->_config
-                . '.ini',
-                true
-                );
         $this->_request = new Library_Request();
         $this->_router = new Library_Router($this->_request);
         $this->_router->findRoute();
@@ -80,7 +71,7 @@ class Library_Application{
     }
 
     public function setConfig($config){
-        $this->_config = (string) $config;
+        Library_Settings::getInstance()->setConfig((string) $config)->loadConfig();
         return $this;
     }
 
