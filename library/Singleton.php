@@ -2,22 +2,22 @@
 
 class Library_Singleton{
 
-    private static $_instance = NULL;
+    private static $_instances;
 
-    private function __construct(){
-
-    }
-
-    protected function __clone() {
+    protected function __construct() {
 
     }
 
-    public static function getInstance(){
+    private function __clone() {
+
+    }
+
+    public static function getInstance() {
         $class = get_called_class();
-        if(is_null(self::$_instance)){
-            self::$_instance = new $class;
+        if (!isset(self::$_instances[$class])) {
+            self::$_instances[$class] = new $class;
         }
-        return self::$_instance;
+        return self::$_instances[$class];
     }
 
 }

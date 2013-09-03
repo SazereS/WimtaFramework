@@ -3,15 +3,36 @@
 class Library_Application{
 
     // VARIABLES
+
+    /**
+     *
+     * @var float
+     */
     private $_start_time;
-    private $_config;
-    private $_autoloader;
+
+    /**
+     *
+     * @var Library_Request
+     */
     private $_request;
+
+    /**
+     *
+     * @var Library_Response
+     */
     private $_response;
+
+    /**
+     *
+     * @var Library_Router
+     */
     private $_router;
+
+    /**
+     *
+     * @var Library_Controller
+     */
     private $_controller;
-    private $_helpers;
-    private $_settings;
 
     // PRIVATE METHODS
 
@@ -39,8 +60,9 @@ class Library_Application{
     }
 
     public function run(){
-        $this->_request = new Library_Request();
-        $this->_router = new Library_Router($this->_request);
+        $this->_request  = new Library_Request();
+        $this->_response = new Library_Response();
+        $this->_router   = new Library_Router($this->_request);
         $this->_router->findRoute();
         $init = new Application_Init();
         $init->init();
@@ -58,15 +80,7 @@ class Library_Application{
         if(!$this->_controller->view->rendered){
             $this->_controller->view->render($this->_request->getAction());
         }
-        $layout = new Library_View_Layout();
-        echo $layout->render(
-                'default',
-                array_merge(
-                        $this->_controller->view->getOut(),
-                        array('content' => $this->_controller->view->rendered)
-                        )
-                )
-                ->rendered;
+        $this->_response->renderLayout($this->_controller->view)->writeContent();
         return $this;
     }
 
