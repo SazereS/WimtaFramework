@@ -2,8 +2,8 @@
 
 class Library_View extends Library_Base{
 
-    private $_out    = array();
-    private $_path   = '';
+    protected $_out    = array();
+    protected $_path   = '';
     public  $rendered = '';
 
     public function __construct($path = NULL, $out = array()) {

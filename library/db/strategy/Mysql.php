@@ -11,4 +11,8 @@ class Library_Db_Strategy_Mysql extends Library_Db_Strategy_Prototype{
                 );
     }
 
+    public function createTable(){
+        # Need to add
+    }
+
 }

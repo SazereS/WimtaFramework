@@ -12,6 +12,10 @@ class Library_Router{
             'controller' => '{controller}',
             'action' => '{action}'
             ),
+        '{controller}/{action}' => array(
+            'controller' => '{controller}',
+            'action' => '{action}'
+            ),
         '{controller}' => array(
             'controller' => '{controller}',
             'action' => 'index'
@@ -121,7 +125,7 @@ class Library_Router{
                     $this->_request->params = array_merge($this->_request->params, $route_params);
                     return $this;
                 } else {
-                    break;
+                    //break;
                 }
             }
         }

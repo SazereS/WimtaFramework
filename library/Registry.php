@@ -2,7 +2,7 @@
 
 class Library_Registry extends Library_Singleton{
 
-    private $_data;
+    protected $_data;
 
     public function __set($name, $value) {
         $this->_data[$name] = $value;

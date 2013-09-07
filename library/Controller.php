@@ -2,7 +2,7 @@
 
 class Library_Controller extends Library_Base{
 
-    private $_vars = array();
+    protected $_vars = array();
     public  $view;
 
     public function init(){

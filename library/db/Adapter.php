@@ -10,6 +10,7 @@ class Library_Db_Adapter extends Library_Singleton{
 
     public function setStrategy(Library_Db_Strategy_Prototype $strategy) {
         $this->_connection = $strategy;
+        $this->_connection->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
         return $this;
     }
 

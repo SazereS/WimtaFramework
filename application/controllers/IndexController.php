@@ -11,4 +11,14 @@ class Application_Controllers_IndexController extends Library_Controller{
         $this->view->out .= "This is just zend clone =__=";
     }
 
+    public function formAction(){
+        $texts = new Application_Models_Tests();
+        if($this->isPost()){
+            $post = $this->getPost();
+            $texts->insertRow($post);
+            $this->redirect('index/form');
+        }
+        $this->view->texts = $texts->fetchAll(NULL, 'id DESC');
+    }
+
 }
