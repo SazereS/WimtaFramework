@@ -8,6 +8,11 @@ class Library_Router{
             'action' => 'view',
             'id' => '{id}'
             ),
+        '{controller}/{id; type: integer}/{action}' => array(
+            'controller' => '{controller}s',
+            'action' => '{action}',
+            'id' => '{id}'
+            ),
         '{controller}/{action}/*' => array(
             'controller' => '{controller}',
             'action' => '{action}'

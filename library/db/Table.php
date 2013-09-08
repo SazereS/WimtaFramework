@@ -43,8 +43,12 @@ class Library_Db_Table{
 
     public function find($id){
         $temp = Library_Db_Adapter::getInstance()->find($this->_table, $id);
-        $data = $temp->fetch(PDO::FETCH_ASSOC);
-        return $this->_current = new Library_Db_Table_Row($this->_table, $data);
+        if($temp->rowCount() > 0){
+            $data = $temp->fetch(PDO::FETCH_ASSOC);
+            return $this->_current = new Library_Db_Table_Row($this->_table, $data);
+        } else {
+            return false;
+        }
     }
 
     public function rowCount($where = NULL, $sort = NULL, $limit = NULL){
@@ -52,6 +56,10 @@ class Library_Db_Table{
     }
 
     public function insertRow($values = array(), $return_inserted = true){
+        $res = Library_Db_Adapter::getInstance()->query('SHOW COLUMNS FROM `' . $this->_table . '` WHERE `Field` = \'created_at\'');
+        if ($res->rowCount() == 1 AND !isset($values['created_at'])) {
+            $values['created_at'] = date('Y-m-d h:i:s');
+        }
         $id = Library_Db_Adapter::getInstance()->insertRow($this->_table, $values);
         if($return_inserted){
             return $this->find($id);
@@ -59,6 +67,13 @@ class Library_Db_Table{
         return $id;
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     *
+     * @return Library_Db_Table_Row
+     */
+>>>>>>> Still working on DB and manager functionality
     public function newRow() {
         return $this->_current = new Library_Db_Table_Row($this->_table);
     }

@@ -11,11 +11,23 @@ class Library_Request {
     }
 
     public function getController(){
-        return ($this->params['controller']) ? $this->params['controller'] : 'index';
+        return ($this->params['controller'])
+                ? $this->params['controller']
+                : (
+                        (Library_Settings::getInstance()->default_controller)
+                        ? Library_Settings::getInstance()->default_controller
+                        : 'index'
+                        );
     }
 
     public function getAction(){
-        return ($this->params['action']) ? $this->params['action'] : 'index';
+        return ($this->params['action'])
+                ? $this->params['action']
+                : (
+                        (Library_Settings::getInstance()->default_action)
+                        ? Library_Settings::getInstance()->default_action
+                        : 'index'
+                        );
     }
 
 }

@@ -35,6 +35,7 @@
                                 <li><a href="#">Helpers</a></li>
                             </ul>
                         </li>
+                        <li><a href="<?=$this->baseUrl('articles') ?>">Блог</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li>
@@ -51,26 +52,11 @@
         </div>
 
         <div class="container">
-            <div class="jumbotron">
-                <div class="row">
-                    <div class="col-md-3">
-                        <img class="" src="<?=$this->baseUrl('images/cat_laptop.png') ?>" />
-                    </div>
-                    <div class="col-md-8 col-md-offset-1">
-                        <h1>Wimta Framework</h1>
-                        <p>Text with framework description</p>
-                        <p>
-                            <a class="btn btn-lg btn-primary" href="#">Free download &raquo;</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
             <div id="content" class="row">
                 <div class="col-md-12">
                     <?=$content ?>
                 </div>
             </div>
-
         </div>
         <script src="//code.jquery.com/jquery.js"></script>
         <script src="<?=$this->baseUrl('js/bootstrap.min.js') ?>"></script>

@@ -9,8 +9,8 @@ class Library_Settings extends Library_Registry{
         return $this;
     }
 
-    public function loadConfig(){
-        $this->_data = parse_ini_file(
+    public function loadConfig($mode = 'production'){
+        $data = parse_ini_file(
                 APPLICATION_PATH
                 . DIRECTORY_SEPARATOR
                 . 'config'
@@ -19,6 +19,11 @@ class Library_Settings extends Library_Registry{
                 . '.ini',
                 true
                 );
+        if($mode == 'development'){
+            $this->_data = $data['development'];
+        } else{
+            $this->_data = array_merge($data['development'], $data['production']);
+        }
         return $this;
     }
 

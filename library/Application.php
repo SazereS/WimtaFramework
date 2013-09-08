@@ -60,6 +60,7 @@ class Library_Application{
     }
 
     public function initDbAdapter() {
+<<<<<<< HEAD
         $strategy = new Library_Db_Strategy_Mysql(
                 'localhost',
                 'test',
@@ -67,11 +68,29 @@ class Library_Application{
                 ''
                 );
         Library_Db_Adapter::getInstance()->setStrategy($strategy);
+=======
+        $strategy = false;
+        if(Library_Settings::getInstance()->db_driver == 'mysql'){
+            $strategy = new Library_Db_Strategy_Mysql(
+                    Library_Settings::getInstance()->db_mysql_host,
+                    Library_Settings::getInstance()->db_mysql_dbname,
+                    Library_Settings::getInstance()->db_mysql_login,
+                    Library_Settings::getInstance()->db_mysql_password
+            );
+        }
+        if($strategy){
+            Library_Db_Adapter::getInstance()->setStrategy($strategy);
+        }
+        return $this;
+>>>>>>> Still working on DB and manager functionality
     }
 
     public function run(){
         $this->_request  = new Library_Request();
         $this->_response = new Library_Response();
+        Library_Registry::getInstance()
+                ->set('request', $this->_request)
+                ->set('response', $this->_response);
         $this->_router   = new Library_Router($this->_request);
         $this->_router->findRoute();
         $this->initDbAdapter();
@@ -95,8 +114,8 @@ class Library_Application{
         return $this;
     }
 
-    public function setConfig($config){
-        Library_Settings::getInstance()->setConfig((string) $config)->loadConfig();
+    public function setConfig($config, $mode = 'production'){
+        Library_Settings::getInstance()->setConfig((string) $config)->loadConfig($mode);
         return $this;
     }
 

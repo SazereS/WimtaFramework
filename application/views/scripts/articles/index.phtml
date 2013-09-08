@@ -1,0 +1,6 @@
+<h3>Все записи</h3>
+<?php foreach($this->articles as $article): ?>
+<h4>#<?=$article->id ?>: <a href="<?=$this->baseUrl('article/' . $article->id) ?>"><?=$article->title ?></a></h4>
+(<?=$article->created_at ?>)
+<?php endforeach; ?>
+

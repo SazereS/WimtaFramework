@@ -8,5 +8,5 @@ define('LIBRARY_PATH', PUBLIC_PATH . '..' . DIRECTORY_SEPARATOR . 'library' . DI
 require_once(LIBRARY_PATH . 'Application.php');
 
 $application = new Library_Application();
-$application->setConfig('default')->run();
+$application->setConfig('default', 'development')->run();
 # echo $application->getElapsedTime();

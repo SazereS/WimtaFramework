@@ -17,6 +17,13 @@ class Application_Controllers_%sController extends Library_Controller{
 
 }
 ',
+    'controller_action' => '
+
+    public function %sAction(){
+        // Put your code here
+    }
+
+',
     'action_view' => '
 <h3>%s#%s</h3>
 <p>Place your code here</p>
@@ -65,8 +72,8 @@ function create_action_view($controller, $action){
     }
     $path .= '/' . $action . '.phtml';
     echo 'Creating ', $controller, '/', $action, '.phtml file...', PHP_EOL;
-    if(file_put_contents($path, sprintf($templates['action_view'], $controller, $action))){
-        echo 'View for ', $controller, '#', $action, ' successfulle created!', PHP_EOL;
+    if(file_put_contents($path, sprintf($templates['action_view'], get_real_name($controller), $action))){
+        echo 'View for ', get_real_name($controller), '#', $action, ' successfulle created!', PHP_EOL;
     }
 }
 
@@ -85,6 +92,30 @@ function create_controller($controller_b){
     }
 }
 
+<<<<<<< HEAD
+=======
+function create_controller_action($controller_b, $action_b){
+    global $templates;
+    $controller = get_real_name($controller_b);
+    $action     = get_real_name($action_b);
+    $action[0]  = strtolower($action[0]);
+    echo 'Creating ', $controller, '#', $action_b, ' action...', PHP_EOL;
+    $controller_code = trim(file_get_contents(APPLICATION_PATH . 'controllers/' . $controller . 'Controller.php'), ' ' . PHP_EOL);
+    $controller_code = substr($controller_code, 0, strlen($controller_code) - 1);
+    $controller_code = trim($controller_code, ' ' . PHP_EOL);
+    $controller_code .= sprintf($templates['controller_action'], $action) . '}';
+    if(
+            file_put_contents(
+                    APPLICATION_PATH . 'controllers/' . $controller . 'Controller.php',
+                    $controller_code
+                    )
+            ){
+        echo 'Action ', $controller, '#', $action_b, ' successfully created!', PHP_EOL;
+        create_action_view($controller_b, $action_b);
+    }
+}
+
+>>>>>>> Still working on DB and manager functionality
 function create_migration(){
     global $templates;
     $time = time();
@@ -105,6 +136,10 @@ function create_model($table_name){
     foreach ($class_name as $key => $val){
         $class_name[$key][0] = strtoupper($val[0]);
     }
+<<<<<<< HEAD
+=======
+    $class_name = implode('', $class_name);
+>>>>>>> Still working on DB and manager functionality
     echo 'Creating model for `' . $table_name . '` table...', PHP_EOL;
     if(
             file_put_contents(
@@ -120,7 +155,11 @@ function migrate(){
     echo 'Migration process started!', PHP_EOL;
     require_once('library/Application.php');
     $application = new Library_Application();
+<<<<<<< HEAD
     $application->initDbAdapter();
+=======
+    $application->setConfig('default', 'development')->initDbAdapter();
+>>>>>>> Still working on DB and manager functionality
     if(file_exists('./application/migrations/version')){
         $version = file_get_contents('./application/migrations/version');
         unlink('./application/migrations/version');
@@ -142,7 +181,15 @@ function migrate(){
             echo 'Migrating to version ', $migration, '...', PHP_EOL;
             $class_name = 'Application_Migrations_Migration' . $migration;
             $class = new $class_name();
+<<<<<<< HEAD
             $class->apply();
+=======
+            try{
+                $class->apply();
+            } catch (Exception $e){
+                throw new Library_Db_Exception($e->getMessage());
+            }
+>>>>>>> Still working on DB and manager functionality
             $version = $class->version;
             echo 'Complete!', PHP_EOL;
         }
@@ -158,7 +205,11 @@ function rollback($target = NULL){
     echo 'Migration rollback started!', PHP_EOL;
     require_once('library/Application.php');
     $application = new Library_Application();
+<<<<<<< HEAD
     $application->initDbAdapter();
+=======
+    $application->setConfig('default', 'development')->initDbAdapter();
+>>>>>>> Still working on DB and manager functionality
     if(file_exists('./application/migrations/version')){
         $version = file_get_contents('./application/migrations/version');
         unlink('./application/migrations/version');
@@ -207,13 +258,18 @@ function rollback($target = NULL){
 
 echo PHP_EOL;
 
-switch (strtolower($argv[1])){
+switch (strtolower(@$argv[1])){
     case 'create':
 
-        switch($argv[2]){
+        switch(@$argv[2]){
             case 'controller':
                 if($argv[3]){
                     create_controller($argv[3]);
+                }
+                break;
+            case 'action':
+                if($argv[3] AND $argv[4]){
+                    create_controller_action($argv[3], $argv[4]);
                 }
                 break;
             default:
@@ -224,7 +280,11 @@ switch (strtolower($argv[1])){
         break; # create end
     case 'db':
 
+<<<<<<< HEAD
         switch($argv[2]){
+=======
+        switch(@$argv[2]){
+>>>>>>> Still working on DB and manager functionality
             case 'migrate':
                 migrate();
                 break;
@@ -237,7 +297,11 @@ switch (strtolower($argv[1])){
                 break;
             case 'create':
 
+<<<<<<< HEAD
                 switch ($argv[3]) {
+=======
+                switch (@$argv[3]) {
+>>>>>>> Still working on DB and manager functionality
                     case 'model':
                         if ($argv[4]) {
                             create_model($argv[4]);

@@ -30,7 +30,7 @@ class Library_Response{
     public function renderLayout(Library_View $view){
         $this->setContent(
                 $this->_layout->render(
-                        ($layout = Library_Settings::getInstance()->system['default_layout'])
+                        ($layout = Library_Settings::getInstance()->default_layout)
                         ? $layout
                         : 'default',
                         array_merge(
