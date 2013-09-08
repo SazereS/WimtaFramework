@@ -61,7 +61,6 @@ class Library_Router{
                     if($lonely_param[0] == '{' AND $lonely_param[strlen($lonely_param) - 1] == '}'){
                         $lonely_param = explode(';', trim($lonely_param, '{};'));
                         $first = true;
-                        $anchors = array();
                         foreach($lonely_param as $p){
                             if($first){
                                 $anchors['{' . $p . '}'] = $exploded_url[$key];

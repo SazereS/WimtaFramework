@@ -60,7 +60,6 @@ class Library_Application{
     }
 
     public function initDbAdapter() {
-<<<<<<< HEAD
         $strategy = new Library_Db_Strategy_Mysql(
                 'localhost',
                 'test',
@@ -68,7 +67,6 @@ class Library_Application{
                 ''
                 );
         Library_Db_Adapter::getInstance()->setStrategy($strategy);
-=======
         $strategy = false;
         if(Library_Settings::getInstance()->db_driver == 'mysql'){
             $strategy = new Library_Db_Strategy_Mysql(
@@ -82,7 +80,6 @@ class Library_Application{
             Library_Db_Adapter::getInstance()->setStrategy($strategy);
         }
         return $this;
->>>>>>> Still working on DB and manager functionality
     }
 
     public function run(){

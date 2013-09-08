@@ -92,8 +92,6 @@ function create_controller($controller_b){
     }
 }
 
-<<<<<<< HEAD
-=======
 function create_controller_action($controller_b, $action_b){
     global $templates;
     $controller = get_real_name($controller_b);
@@ -115,7 +113,6 @@ function create_controller_action($controller_b, $action_b){
     }
 }
 
->>>>>>> Still working on DB and manager functionality
 function create_migration(){
     global $templates;
     $time = time();
@@ -136,10 +133,7 @@ function create_model($table_name){
     foreach ($class_name as $key => $val){
         $class_name[$key][0] = strtoupper($val[0]);
     }
-<<<<<<< HEAD
-=======
     $class_name = implode('', $class_name);
->>>>>>> Still working on DB and manager functionality
     echo 'Creating model for `' . $table_name . '` table...', PHP_EOL;
     if(
             file_put_contents(
@@ -155,11 +149,7 @@ function migrate(){
     echo 'Migration process started!', PHP_EOL;
     require_once('library/Application.php');
     $application = new Library_Application();
-<<<<<<< HEAD
-    $application->initDbAdapter();
-=======
     $application->setConfig('default', 'development')->initDbAdapter();
->>>>>>> Still working on DB and manager functionality
     if(file_exists('./application/migrations/version')){
         $version = file_get_contents('./application/migrations/version');
         unlink('./application/migrations/version');
@@ -181,15 +171,11 @@ function migrate(){
             echo 'Migrating to version ', $migration, '...', PHP_EOL;
             $class_name = 'Application_Migrations_Migration' . $migration;
             $class = new $class_name();
-<<<<<<< HEAD
-            $class->apply();
-=======
             try{
                 $class->apply();
             } catch (Exception $e){
                 throw new Library_Db_Exception($e->getMessage());
             }
->>>>>>> Still working on DB and manager functionality
             $version = $class->version;
             echo 'Complete!', PHP_EOL;
         }
@@ -205,11 +191,7 @@ function rollback($target = NULL){
     echo 'Migration rollback started!', PHP_EOL;
     require_once('library/Application.php');
     $application = new Library_Application();
-<<<<<<< HEAD
-    $application->initDbAdapter();
-=======
     $application->setConfig('default', 'development')->initDbAdapter();
->>>>>>> Still working on DB and manager functionality
     if(file_exists('./application/migrations/version')){
         $version = file_get_contents('./application/migrations/version');
         unlink('./application/migrations/version');
@@ -279,12 +261,7 @@ switch (strtolower(@$argv[1])){
 
         break; # create end
     case 'db':
-
-<<<<<<< HEAD
-        switch($argv[2]){
-=======
         switch(@$argv[2]){
->>>>>>> Still working on DB and manager functionality
             case 'migrate':
                 migrate();
                 break;
@@ -297,11 +274,7 @@ switch (strtolower(@$argv[1])){
                 break;
             case 'create':
 
-<<<<<<< HEAD
-                switch ($argv[3]) {
-=======
                 switch (@$argv[3]) {
->>>>>>> Still working on DB and manager functionality
                     case 'model':
                         if ($argv[4]) {
                             create_model($argv[4]);

@@ -55,9 +55,7 @@ class Library_Db_Table_Row implements IteratorAggregate{
     public function save(){
         if($this->_new){
             try{
-<<<<<<< HEAD
                 Library_Db_Adapter::getInstance()->insertRow($this->_table, $this->_cells);
-=======
                 $id = Library_Db_Adapter::getInstance()->insertRow($this->_table, $this->_cells);
                 $this->_new = false;
                 $res = Library_Db_Adapter::getInstance()->find($this->_table, $id);
@@ -65,7 +63,6 @@ class Library_Db_Table_Row implements IteratorAggregate{
                 $this->_id = $cells[$this->_id_field];
                 unset($cells[$this->_id_field]);
                 $this->_cells = $cells;
->>>>>>> Still working on DB and manager functionality
             }  catch (Library_Db_Exception $e){
                 throw new Library_Db_Exception($e->getMessage());
                 return false;
