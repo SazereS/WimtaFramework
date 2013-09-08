@@ -60,6 +60,7 @@ class Library_Db_Strategy_Prototype extends PDO{
     }
 
     public function insertRow($table, $values = array()){
+        $anchors = $cols = array();
         foreach ($values as $k => $v) {
             $cols   []         = $k;
             $anchors[]         = ':' . $k;
@@ -84,6 +85,7 @@ class Library_Db_Strategy_Prototype extends PDO{
 
     public function updateRow($table, $where = NULL, $values = array()){
         $where = ($where) ? ' WHERE ' . $where : '';
+        $vals = array();
         foreach ($values as $k => $v) {
             $vals[] = '`' . $k . '`' . '= :' . $k;
         }

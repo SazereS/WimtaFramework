@@ -2,6 +2,7 @@
 
 class Library_Db_Table_Row implements IteratorAggregate{
 
+    protected $_new = false;
     protected $_cells;
     protected $_table;
     protected $_id_field;
@@ -11,8 +12,17 @@ class Library_Db_Table_Row implements IteratorAggregate{
         $this->_table    = $table;
         $this->_id_field = Library_Db_Adapter::getInstance()->getKeyField($this->_table);
         $this->_id       = $cells[$this->_id_field];
-        unset($cells[$this->_id_field]);
-        $this->_cells = $cells;
+        if(is_null($cells)){
+            $this->_cells = array();
+            $this->_new = true;
+            $res = Library_Db_Adapter::getInstance()->query('SHOW COLUMNS FROM `' . $this->_table . '` WHERE `Field` = \'created_at\'');
+            if($res->rowCount() == 1){
+                $this->_cells['created_at'] = date('Y-m-d h:i:s');
+            }
+        } else {
+            unset($cells[$this->_id_field]);
+            $this->_cells = $cells;
+        }
     }
 
     public function __set($name, $value) {
@@ -43,12 +53,24 @@ class Library_Db_Table_Row implements IteratorAggregate{
     }
 
     public function save(){
-        $where = '`' . $this->_id_field . '` = ' . Library_Db_Adapter::getInstance()->quote($this->_id);
-        try{
-            Library_Db_Adapter::getInstance()->updateRow($this->_table, $where, $values);
-        }  catch (Library_Db_Exception $e){
-            throw new Library_Db_Exception($e->getMessage());
-            return false;
+        if($this->_new){
+            try{
+                Library_Db_Adapter::getInstance()->insertRow($this->_table, $this->_cells);
+            }  catch (Library_Db_Exception $e){
+                throw new Library_Db_Exception($e->getMessage());
+                return false;
+            }
+        } else {
+            $where = '`' . $this->_id_field . '` = ' . Library_Db_Adapter::getInstance()->quote($this->_id);
+            if(isset($this->_cells['updated_at'])){
+                unset($this->_cells['updated_at']);
+            }
+            try{
+                Library_Db_Adapter::getInstance()->updateRow($this->_table, $where, $this->_cells);
+            }  catch (Library_Db_Exception $e){
+                throw new Library_Db_Exception($e->getMessage());
+                return false;
+            }
         }
         return true;
     }

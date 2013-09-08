@@ -59,6 +59,10 @@ class Library_Db_Table{
         return $id;
     }
 
+    public function newRow() {
+        return $this->_current = new Library_Db_Table_Row($this->_table);
+    }
+
     public function updateRow($where = NULL, $values = array()){
         $temp = Library_Db_Adapter::getInstance()->updateRow($where, $values);
         return $temp->rowCount();

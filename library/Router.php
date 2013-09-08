@@ -56,6 +56,7 @@ class Library_Router{
                     if($lonely_param[0] == '{' AND $lonely_param[strlen($lonely_param) - 1] == '}'){
                         $lonely_param = explode(';', trim($lonely_param, '{};'));
                         $first = true;
+                        $anchors = array();
                         foreach($lonely_param as $p){
                             if($first){
                                 $anchors['{' . $p . '}'] = $exploded_url[$key];
@@ -98,6 +99,7 @@ class Library_Router{
                     } elseif($lonely_param == '*'){
                         if($exploded_url[$key] != NULL){
                             $is_key = true;
+                            $params = array();
                             for($i = $key; $i < $url_length; $i++){
                                 if($is_key){
                                     $params[$exploded_url[$i]] = false;
@@ -129,6 +131,7 @@ class Library_Router{
                 }
             }
         }
+        return $this;
     }
 
 }

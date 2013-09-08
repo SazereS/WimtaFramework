@@ -59,11 +59,22 @@ class Library_Application{
         $this->_helpers = new Library_Base();
     }
 
+    public function initDbAdapter() {
+        $strategy = new Library_Db_Strategy_Mysql(
+                'localhost',
+                'test',
+                'root',
+                ''
+                );
+        Library_Db_Adapter::getInstance()->setStrategy($strategy);
+    }
+
     public function run(){
         $this->_request  = new Library_Request();
         $this->_response = new Library_Response();
         $this->_router   = new Library_Router($this->_request);
         $this->_router->findRoute();
+        $this->initDbAdapter();
         $init = new Application_Init();
         $init->init();
         $view = new Library_View(
