@@ -40,4 +40,12 @@ class Application_Controllers_ArticlesController extends Library_Controller{
         }
     }
 
+    public function editAction(){
+        // Put your code here
+    }
+
+    public function deleteAction(){
+        // Put your code here
+    }
+
 }
