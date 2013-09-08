@@ -67,13 +67,10 @@ class Library_Db_Table{
         return $id;
     }
 
-<<<<<<< HEAD
-=======
     /**
      *
      * @return Library_Db_Table_Row
      */
->>>>>>> Still working on DB and manager functionality
     public function newRow() {
         return $this->_current = new Library_Db_Table_Row($this->_table);
     }
