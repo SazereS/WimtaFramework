@@ -83,6 +83,8 @@ class Application{
     }
 
     public function run(){
+        $init = new \Application\Init();
+        $init->preInit();
         $this->_request  = new \Library\Request();
         $this->_response = new \Library\Response();
         \Library\Registry::getInstance()
@@ -91,7 +93,6 @@ class Application{
         $this->_router   = new \Library\Router($this->_request);
         $this->_router->findRoute();
         $this->initDbAdapter();
-        $init = new \Application\Init();
         $init->init();
         $view = new \Library\View(
                 APPLICATION_PATH
@@ -108,6 +109,7 @@ class Application{
             $this->_controller->view->render($this->_request->getAction());
         }
         $this->_response->renderLayout($this->_controller->view)->writeContent();
+        $init->postInit();
         return $this;
     }
 

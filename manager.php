@@ -5,14 +5,17 @@ global $templates;
 $templates= array(
     'controller' => '<?php
 
-class Application_Controllers_%sController extends Library_Controller{
+namespace Application\\Controllers;
+use \\Application\\Models;
+
+class %sController extends \\Library\\Controller{
 
     public function init(){
-
+        // Initialization code here
     }
 
     public function indexAction(){
-
+        // Default action code
     }
 
 }
@@ -30,7 +33,9 @@ class Application_Controllers_%sController extends Library_Controller{
 ',
     'migration' => '<?php
 
-class Application_Migrations_Migration%s extends Library_Db_Migration{
+namespace Application\\Migrations;
+
+class Migration%s extends \\Library\\Db\\Migration{
 
     public $version = \'%s\';
 
@@ -46,7 +51,9 @@ class Application_Migrations_Migration%s extends Library_Db_Migration{
 ',
     'model' => '<?php
 
-class Application_Models_%s extends Library_Db_Table{
+namespace Application\\Models;
+
+class %s extends \\Library\\Db\\Table{
 
     public function __construct() {
         $this->_table = \'%s\';
@@ -148,7 +155,7 @@ function create_model($table_name){
 function migrate(){
     echo 'Migration process started!', PHP_EOL;
     require_once('library/Application.php');
-    $application = new Library_Application();
+    $application = new \Library\Application();
     $application->setConfig('default', 'development')->initDbAdapter();
     if(file_exists('./application/migrations/version')){
         $version = file_get_contents('./application/migrations/version');
@@ -169,12 +176,12 @@ function migrate(){
     foreach($migrations as $migration){
         if($version < $migration){
             echo 'Migrating to version ', $migration, '...', PHP_EOL;
-            $class_name = 'Application_Migrations_Migration' . $migration;
+            $class_name = '\\Application\\Migrations\\Migration' . $migration;
             $class = new $class_name();
             try{
                 $class->apply();
             } catch (Exception $e){
-                throw new Library_Db_Exception($e->getMessage());
+                throw new \Library\Db\Exception($e->getMessage());
             }
             $version = $class->version;
             echo 'Complete!', PHP_EOL;
@@ -190,7 +197,7 @@ function migrate(){
 function rollback($target = NULL){
     echo 'Migration rollback started!', PHP_EOL;
     require_once('library/Application.php');
-    $application = new Library_Application();
+    $application = new \Library\Application();
     $application->setConfig('default', 'development')->initDbAdapter();
     if(file_exists('./application/migrations/version')){
         $version = file_get_contents('./application/migrations/version');
@@ -209,10 +216,10 @@ function rollback($target = NULL){
     }
     rsort($migrations);
     foreach($migrations as $key => $migration){
-        $class_name = 'Application_Migrations_Migration' . $migration;
+        $class_name = '\\Application\\Migrations\\Migration' . $migration;
         $class = new $class_name();
         if(isset($migrations[$key + 1])){
-            $prev_class_name = 'Application_Migrations_Migration' . $migrations[$key + 1];
+            $prev_class_name = '\\Application\\Migrations\\Migration' . $migrations[$key + 1];
             $prev_class = new $prev_class_name();
             $prev_version = $prev_class->version;
         } else {

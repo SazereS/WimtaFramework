@@ -11,6 +11,15 @@ class Init extends \Library\Base{
                 $this->$method();
             }
         }
+        return $this;
+    }
+
+    public function preInit(){
+
+    }
+
+    public function postInit(){
+
     }
 
 }

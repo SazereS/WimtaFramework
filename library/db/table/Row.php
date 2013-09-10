@@ -57,7 +57,6 @@ class Row implements \IteratorAggregate{
     public function save(){
         if($this->_new){
             try{
-                \Library\Db\Adapter::getInstance()->insertRow($this->_table, $this->_cells);
                 $id = \Library\Db\Adapter::getInstance()->insertRow($this->_table, $this->_cells);
                 $this->_new = false;
                 $res = \Library\Db\Adapter::getInstance()->find($this->_table, $id);
@@ -85,9 +84,9 @@ class Row implements \IteratorAggregate{
     }
 
     public function delete(){
-        $where = '`' . $this->_id_field . '` = ' . Library\Db\Adapter::getInstance()->quote($this->_id);
+        $where = '`' . $this->_id_field . '` = ' . \Library\Db\Adapter::getInstance()->quote($this->_id);
         try{
-            \Library\Db\Adapter::getInstance()->deleteRow($this->_table, $where);
+            \Library\Db\Adapter::getInstance()->deleteRows($this->_table, $where);
         }  catch (\Library\Db\Exception $e){
             throw new \Library\Db\Exception($e->getMessage());
             return false;

@@ -32,6 +32,10 @@ class Router{
             'action' => 'index'
             ),
     );
+
+    /**
+     * @var Request
+     */
     private $_request;
 
     public function __construct(\Library\Request $request){

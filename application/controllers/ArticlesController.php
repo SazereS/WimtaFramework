@@ -1,7 +1,7 @@
 <?php
 
 namespace Application\Controllers;
-use \Application\Models;
+use \Application\Models\Articles;
 
 class ArticlesController extends \Library\Controller{
 
@@ -32,22 +32,54 @@ class ArticlesController extends \Library\Controller{
     }
 
     public function viewAction(){
-        $articles = new \Application\Models\Articles();
+        $articles = new Articles();
         if($id = $this->getParam('id')){
             if($articles->find($id)){
                 $this->view->article = $articles->getCurrent();
             } else {
                 die('Error 404');
             }
+        } else {
+            $this->redirect('articles');
         }
     }
 
     public function editAction(){
-        // Put your code here
+        $articles = new Articles();
+        if($id = $this->getParam('id')){
+            if($articles->find($id)){
+                $article = $articles->getCurrent();
+
+                $this->view->post = $article->toArray();
+                if($this->isPost()){
+                    $post = $this->getPost();
+                    if($post['title'] AND $post['text']){
+                        $article->text  = $post['text'];
+                        $article->title = $post['title'];
+                        $article->save();
+                        if($article->id){
+                            $this->redirect('article/' . $article->id);
+                        }
+                    }
+                    $this->view->post = $post;
+                }
+                $this->view->render('new');
+            } else {
+                die('Error 404');
+            }
+        } else {
+            $this->redirect('articles');
+        }
     }
 
     public function deleteAction(){
-        // Put your code here
+        $articles = new Articles();
+        if($id = $this->getParam('id')){
+            if($articles->find($id)){
+                $articles->getCurrent()->delete();
+            }
+        }
+        $this->redirect('articles');
     }
 
 }

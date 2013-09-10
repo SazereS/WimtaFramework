@@ -5,6 +5,10 @@ namespace Library;
 class Controller extends \Library\Base{
 
     protected $_vars = array();
+
+    /**
+     * @var \Library\View;
+     */
     public  $view;
 
     public function init(){

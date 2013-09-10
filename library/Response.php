@@ -5,6 +5,10 @@ namespace Library;
 class Response{
 
     private $_content;
+
+    /**
+     * @var View\Layout
+     */
     private $_layout;
 
     public function __construct() {
