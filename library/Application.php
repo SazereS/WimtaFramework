@@ -1,6 +1,8 @@
 <?php
 
-class Library_Application{
+namespace Library;
+
+class Application{
 
     // VARIABLES
 
@@ -12,25 +14,25 @@ class Library_Application{
 
     /**
      *
-     * @var Library_Request
+     * @var \Library\Request
      */
     private $_request;
 
     /**
      *
-     * @var Library_Response
+     * @var \Library\Response
      */
     private $_response;
 
     /**
      *
-     * @var Library_Router
+     * @var \Library\Router
      */
     private $_router;
 
     /**
      *
-     * @var Library_Controller
+     * @var \Library\Controller
      */
     private $_controller;
 
@@ -39,61 +41,59 @@ class Library_Application{
     // PUBLIC METHODS
     public function __construct() {
         $this->_start_time = microtime(true);
-        spl_autoload_register(function($class){
-            $path = explode('_', strtolower($class));
-            $file = array_pop($path);
-            $file[0] = strtoupper($file[0]);
-            $path = implode(DIRECTORY_SEPARATOR, $path);
-            $path = APPLICATION_PATH
+        spl_autoload_register(function($path){
+            $path      = explode('\\', trim($path, '\\'));
+            $class     = array_pop($path);
+            $full_path = APPLICATION_PATH
                     . '..'
                     . DIRECTORY_SEPARATOR
-                    . $path
+                    . strtolower(implode(DIRECTORY_SEPARATOR, $path))
                     . DIRECTORY_SEPARATOR
-                    . $file
+                    . $class
                     . '.php';
-            if(!file_exists($path)){
-                throw new Library_Autoloader_Exception('Can\'t load class "' . $class . '": File not exists!');
+            if(!file_exists($full_path)){
+                throw new \Library\Autoloader\Exception('Can\'t load class "' . $class . '": File not exists!');
             }
-                require_once ($path);
+            require_once ($full_path);
         });
-        $this->_helpers = new Library_Base();
+        $this->_helpers = new \Library\Base();
     }
 
     public function initDbAdapter() {
-        $strategy = new Library_Db_Strategy_Mysql(
+        $strategy = new \Library\Db\Strategy\Mysql(
                 'localhost',
                 'test',
                 'root',
                 ''
                 );
-        Library_Db_Adapter::getInstance()->setStrategy($strategy);
+        \Library\Db\Adapter::getInstance()->setStrategy($strategy);
         $strategy = false;
-        if(Library_Settings::getInstance()->db_driver == 'mysql'){
-            $strategy = new Library_Db_Strategy_Mysql(
-                    Library_Settings::getInstance()->db_mysql_host,
-                    Library_Settings::getInstance()->db_mysql_dbname,
-                    Library_Settings::getInstance()->db_mysql_login,
-                    Library_Settings::getInstance()->db_mysql_password
+        if(\Library\Settings::getInstance()->db_driver == 'mysql'){
+            $strategy = new \Library\Db\Strategy\Mysql(
+                    \Library\Settings::getInstance()->db_mysql_host,
+                    \Library\Settings::getInstance()->db_mysql_dbname,
+                    \Library\Settings::getInstance()->db_mysql_login,
+                    \Library\Settings::getInstance()->db_mysql_password
             );
         }
         if($strategy){
-            Library_Db_Adapter::getInstance()->setStrategy($strategy);
+            \Library\Db\Adapter::getInstance()->setStrategy($strategy);
         }
         return $this;
     }
 
     public function run(){
-        $this->_request  = new Library_Request();
-        $this->_response = new Library_Response();
-        Library_Registry::getInstance()
+        $this->_request  = new \Library\Request();
+        $this->_response = new \Library\Response();
+        \Library\Registry::getInstance()
                 ->set('request', $this->_request)
                 ->set('response', $this->_response);
-        $this->_router   = new Library_Router($this->_request);
+        $this->_router   = new \Library\Router($this->_request);
         $this->_router->findRoute();
         $this->initDbAdapter();
-        $init = new Application_Init();
+        $init = new \Application\Init();
         $init->init();
-        $view = new Library_View(
+        $view = new \Library\View(
                 APPLICATION_PATH
                 . 'views'
                 . DIRECTORY_SEPARATOR
@@ -112,7 +112,7 @@ class Library_Application{
     }
 
     public function setConfig($config, $mode = 'production'){
-        Library_Settings::getInstance()->setConfig((string) $config)->loadConfig($mode);
+        \Library\Settings::getInstance()->setConfig((string) $config)->loadConfig($mode);
         return $this;
     }
 
@@ -126,17 +126,17 @@ class Library_Application{
 
     public function loadController($controller_name, $view = NULL){
         if($view == NULL){
-            $view = new Library_View();
+            $view = new \Library\View();
         }
         $controller_name =
-                'Application_Controllers_'
+                '\\Application\\Controllers\\'
                 . $this->_helpers->getRealName($controller_name)
                 . 'Controller';
         try{
             $this->_controller = new $controller_name;
             $this->_controller->view = $view;
-        } catch(Library_Autoloader_Exception $e){
-            throw new Library_Application_Exception('Cannot find controller class "' . $controller_name . '"');
+        } catch(\Library\Autoloader\Exception $e){
+            throw new \Library\Application\Exception('Cannot find controller class "' . $controller_name . '"');
         }
         return $this;
     }
@@ -146,7 +146,7 @@ class Library_Application{
         if(method_exists($this->_controller, $action_name)){
             return $this->_controller->$action_name();
         } else {
-            throw new Library_Controller_Exception('Controller "' . $this->_request->getController() . '" hasn\'t got method "' . $action_name . '"');
+            throw new \Library\Controller\Exception('Controller "' . $this->_request->getController() . '" hasn\'t got method "' . $action_name . '"');
         }
     }
 

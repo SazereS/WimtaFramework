@@ -1,6 +1,8 @@
 <?php
 
-class Library_View_Layout extends Library_View{
+namespace Library\View;
+
+class Layout extends \Library\View{
 
     public function __construct($path = NULL, $out = array()) {
         parent::__construct(

@@ -1,6 +1,8 @@
 <?php
 
-class Application_Controllers_IndexController extends Library_Controller{
+namespace Application\Controllers;
+
+class IndexController extends \Library\Controller{
 
     public function init(){
 

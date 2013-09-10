@@ -1,12 +1,14 @@
 <?php
 
-class Library_Response{
+namespace Library;
+
+class Response{
 
     private $_content;
     private $_layout;
 
     public function __construct() {
-        $this->_layout = new Library_View_Layout();
+        $this->_layout = new \Library\View\Layout();
     }
 
     public function writeContent(){
@@ -27,10 +29,10 @@ class Library_Response{
         return $this->_layout;
     }
 
-    public function renderLayout(Library_View $view){
+    public function renderLayout(\Library\View $view){
         $this->setContent(
                 $this->_layout->render(
-                        ($layout = Library_Settings::getInstance()->default_layout)
+                        ($layout = \Library\Settings::getInstance()->default_layout)
                         ? $layout
                         : 'default',
                         array_merge(

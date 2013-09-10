@@ -1,6 +1,8 @@
 <?php
 
-class Application_Migrations_Migration1378672229 extends Library_Db_Migration{
+namespace Application\Migrations;
+
+class Migration1378672229 extends \Library\Db\Migration{
 
     public $version = '1378672229';
 

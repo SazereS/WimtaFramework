@@ -1,6 +1,8 @@
 <?php
 
-class Library_Controller extends Library_Base{
+namespace Library;
+
+class Controller extends \Library\Base{
 
     protected $_vars = array();
     public  $view;
@@ -19,18 +21,18 @@ class Library_Controller extends Library_Base{
 
     /**
      *
-     * @return Library_Request
+     * @return \Library\Request
      */
     public function getRequest(){
-        return Library_Registry::getInstance()->request;
+        return \Library\Registry::getInstance()->request;
     }
 
     /**
      *
-     * @return Library_Response
+     * @return \Library\Response
      */
     public function getResponse(){
-        return Library_Registry::getInstance()->response;
+        return \Library\Registry::getInstance()->response;
     }
 
     public function getParam($name) {

@@ -1,6 +1,8 @@
 <?php
 
-class Library_Router{
+namespace Library;
+
+class Router{
 
     private $_routes = array(
         '{controller}/{id; type: integer}' => array(
@@ -32,7 +34,7 @@ class Library_Router{
     );
     private $_request;
 
-    public function __construct(Library_Request $request){
+    public function __construct(\Library\Request $request){
         $this->_request = $request;
     }
 

@@ -1,6 +1,8 @@
 <?php
 
-class Helpers_GetPost{
+namespace Helpers;
+
+class GetPost{
     public static function getPost(){
         return $_POST;
     }

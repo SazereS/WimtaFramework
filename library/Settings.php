@@ -1,6 +1,8 @@
 <?php
 
-class Library_Settings extends Library_Registry{
+namespace Library;
+
+class Settings extends \Library\Registry{
 
     private $_config;
 

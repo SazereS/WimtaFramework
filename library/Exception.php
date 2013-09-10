@@ -1,5 +1,7 @@
 <?php
 
-class Library_Exception extends Exception{
+namespace Library;
+
+class Exception extends \Exception{
 
 }

@@ -1,6 +1,8 @@
 <?php
 
-class Library_Singleton{
+namespace Library;
+
+class Singleton{
 
     private static $_instances;
 

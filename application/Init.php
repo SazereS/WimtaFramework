@@ -1,6 +1,8 @@
 <?php
 
-class Application_Init extends Library_Init{
+namespace Application;
+
+class Init extends \Library\Init{
 
     public function _initTest(){
 

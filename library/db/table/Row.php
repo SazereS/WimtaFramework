@@ -1,6 +1,8 @@
 <?php
 
-class Library_Db_Table_Row implements IteratorAggregate{
+namespace Library\Db\Table;
+
+class Row implements \IteratorAggregate{
 
     protected $_new = false;
     protected $_cells;
@@ -10,12 +12,12 @@ class Library_Db_Table_Row implements IteratorAggregate{
 
     public function __construct($table, array $cells = NULL) {
         $this->_table    = $table;
-        $this->_id_field = Library_Db_Adapter::getInstance()->getKeyField($this->_table);
+        $this->_id_field = \Library\Db\Adapter::getInstance()->getKeyField($this->_table);
         $this->_id       = $cells[$this->_id_field];
         if(is_null($cells)){
             $this->_cells = array();
             $this->_new = true;
-            $res = Library_Db_Adapter::getInstance()->query('SHOW COLUMNS FROM `' . $this->_table . '` WHERE `Field` = \'created_at\'');
+            $res = \Library\Db\Adapter::getInstance()->query('SHOW COLUMNS FROM `' . $this->_table . '` WHERE `Field` = \'created_at\'');
             if($res->rowCount() == 1){
                 $this->_cells['created_at'] = date('Y-m-d h:i:s');
             }
@@ -27,7 +29,7 @@ class Library_Db_Table_Row implements IteratorAggregate{
 
     public function __set($name, $value) {
         if($name == $this->_id_field){
-            throw new Library_Db_Exception('Cannot change primary key value!');
+            throw new \Library\Db\Exception('Cannot change primary key value!');
         }
         $this->_cells[$name] = $value;
         return $this;
@@ -55,27 +57,27 @@ class Library_Db_Table_Row implements IteratorAggregate{
     public function save(){
         if($this->_new){
             try{
-                Library_Db_Adapter::getInstance()->insertRow($this->_table, $this->_cells);
-                $id = Library_Db_Adapter::getInstance()->insertRow($this->_table, $this->_cells);
+                \Library\Db\Adapter::getInstance()->insertRow($this->_table, $this->_cells);
+                $id = \Library\Db\Adapter::getInstance()->insertRow($this->_table, $this->_cells);
                 $this->_new = false;
-                $res = Library_Db_Adapter::getInstance()->find($this->_table, $id);
-                $cells = $res->fetch(PDO::FETCH_ASSOC);
+                $res = \Library\Db\Adapter::getInstance()->find($this->_table, $id);
+                $cells = $res->fetch(\PDO::FETCH_ASSOC);
                 $this->_id = $cells[$this->_id_field];
                 unset($cells[$this->_id_field]);
                 $this->_cells = $cells;
-            }  catch (Library_Db_Exception $e){
-                throw new Library_Db_Exception($e->getMessage());
+            }  catch (\Library\Db\Exception $e){
+                throw new \Library\Db\Exception($e->getMessage());
                 return false;
             }
         } else {
-            $where = '`' . $this->_id_field . '` = ' . Library_Db_Adapter::getInstance()->quote($this->_id);
+            $where = '`' . $this->_id_field . '` = ' . \Library\Db\Adapter::getInstance()->quote($this->_id);
             if(isset($this->_cells['updated_at'])){
                 unset($this->_cells['updated_at']);
             }
             try{
-                Library_Db_Adapter::getInstance()->updateRow($this->_table, $where, $this->_cells);
-            }  catch (Library_Db_Exception $e){
-                throw new Library_Db_Exception($e->getMessage());
+                \Library\Db\Adapter::getInstance()->updateRow($this->_table, $where, $this->_cells);
+            }  catch (\Library\Db\Exception $e){
+                throw new \Library\Db\Exception($e->getMessage());
                 return false;
             }
         }
@@ -83,18 +85,18 @@ class Library_Db_Table_Row implements IteratorAggregate{
     }
 
     public function delete(){
-        $where = '`' . $this->_id_field . '` = ' . Library_Db_Adapter::getInstance()->quote($this->_id);
+        $where = '`' . $this->_id_field . '` = ' . Library\Db\Adapter::getInstance()->quote($this->_id);
         try{
-            Library_Db_Adapter::getInstance()->deleteRow($this->_table, $where);
-        }  catch (Library_Db_Exception $e){
-            throw new Library_Db_Exception($e->getMessage());
+            \Library\Db\Adapter::getInstance()->deleteRow($this->_table, $where);
+        }  catch (\Library\Db\Exception $e){
+            throw new \Library\Db\Exception($e->getMessage());
             return false;
         }
         return true;
     }
 
     public function getIterator() {
-        return new ArrayIterator($this->_cells);
+        return new \ArrayIterator($this->_cells);
     }
 
 }

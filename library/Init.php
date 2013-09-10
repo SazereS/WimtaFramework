@@ -1,6 +1,8 @@
 <?php
 
-class Library_Init extends Library_Base{
+namespace Library;
+
+class Init extends \Library\Base{
 
     public function init(){
         $methods = get_class_methods(get_called_class());

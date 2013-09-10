@@ -1,6 +1,8 @@
 <?php
 
-class Library_View extends Library_Base{
+namespace Library;
+
+class View extends \Library\Base{
 
     protected $_out    = array();
     protected $_path   = '';
@@ -29,7 +31,7 @@ class Library_View extends Library_Base{
     public function render($file, $out = array()){
         $path = $this->_path . DIRECTORY_SEPARATOR . $file . '.phtml';
         if(!file_exists($path)){
-            throw new Library_View_Exception('Cannot find view file: "' . $path . '"');
+            throw new \Library\View\Exception('Cannot find view file: "' . $path . '"');
         }
         extract(array_merge($out, $this->_out), EXTR_OVERWRITE);
         ob_start();

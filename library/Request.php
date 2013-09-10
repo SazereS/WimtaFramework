@@ -1,6 +1,8 @@
 <?php
 
-class Library_Request {
+namespace Library;
+
+class Request {
 
     public $params = array();
     public $url    = '';
@@ -14,8 +16,8 @@ class Library_Request {
         return ($this->params['controller'])
                 ? $this->params['controller']
                 : (
-                        (Library_Settings::getInstance()->default_controller)
-                        ? Library_Settings::getInstance()->default_controller
+                        (\Library\Settings::getInstance()->default_controller)
+                        ? \Library\Settings::getInstance()->default_controller
                         : 'index'
                         );
     }
@@ -24,8 +26,8 @@ class Library_Request {
         return ($this->params['action'])
                 ? $this->params['action']
                 : (
-                        (Library_Settings::getInstance()->default_action)
-                        ? Library_Settings::getInstance()->default_action
+                        (\Library\Settings::getInstance()->default_action)
+                        ? \Library\Settings::getInstance()->default_action
                         : 'index'
                         );
     }

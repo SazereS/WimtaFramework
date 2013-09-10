@@ -1,6 +1,6 @@
 <?php
 
-namespace Library\Autoloader;
+namespace Library\Application;
 
 class Exception extends \Library\Exception{
 

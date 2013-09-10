@@ -1,6 +1,8 @@
 <?php
 
-class Library_Db_Strategy_Prototype extends PDO{
+namespace Library\Db\Strategy;
+
+class Prototype extends \PDO{
 
 
     protected $_prepared = array();
@@ -9,8 +11,8 @@ class Library_Db_Strategy_Prototype extends PDO{
     public function __construct($dsn, $username = NULL, $passwd = NULL, $options = NULL) {
         try{
             parent::__construct($dsn, $username, $passwd, $options);
-        }catch(PDOException $e){
-            throw new Library_Db_Exception($e->getMessage());
+        }catch(\PDOException $e){
+            throw new \Library\Db\Exception($e->getMessage());
         }
     }
 
@@ -44,8 +46,8 @@ class Library_Db_Strategy_Prototype extends PDO{
         try {
             $this->_prepared[$q]->execute(array($id));
             return $this->_prepared[$q];
-        } catch (PDOException $e) {
-            throw new Library_Db_Exception($e->getMessage());
+        } catch (\PDOException $e) {
+            throw new \Library\Db\Exception($e->getMessage());
         }
     }
 
@@ -78,8 +80,8 @@ class Library_Db_Strategy_Prototype extends PDO{
         try{
             $this->_prepared[$q]->execute($values);
             return $this->lastInsertId();
-        }  catch (PDOException $e){
-            throw new Library_Db_Exception($e->getMessage());
+        }  catch (\PDOException $e){
+            throw new \Library\Db\Exception($e->getMessage());
         }
     }
 
@@ -96,8 +98,8 @@ class Library_Db_Strategy_Prototype extends PDO{
         try {
             $this->_prepared[$q]->execute($values);
             return $this->_prepared[$q];
-        } catch (PDOException $e) {
-            throw new Library_Db_Exception($e->getMessage());
+        } catch (\PDOException $e) {
+            throw new \Library\Db\Exception($e->getMessage());
         }
     }
 

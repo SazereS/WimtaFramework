@@ -1,13 +1,15 @@
 <?php
 
-class Application_Controllers_ArticlesController extends Library_Controller{
+namespace Application\Controllers;
+use \Application\Models;
+
+class ArticlesController extends \Library\Controller{
 
     public function init(){
-
     }
 
     public function indexAction(){
-        $articles = new Application_Models_Articles();
+        $articles = new Articles();
         $this->view->articles = $articles->fetchAll();
     }
 
@@ -16,7 +18,7 @@ class Application_Controllers_ArticlesController extends Library_Controller{
         if($this->isPost()){
             $post = $this->getPost();
             if($post['title'] AND $post['text']){
-                $articles = new Application_Models_Articles();
+                $articles = new Articles();
                 $row = $articles->newRow();
                 $row->text  = $post['text'];
                 $row->title = $post['title'];
@@ -30,7 +32,7 @@ class Application_Controllers_ArticlesController extends Library_Controller{
     }
 
     public function viewAction(){
-        $articles = new Application_Models_Articles();
+        $articles = new \Application\Models\Articles();
         if($id = $this->getParam('id')){
             if($articles->find($id)){
                 $this->view->article = $articles->getCurrent();

@@ -1,6 +1,8 @@
 <?php
 
-class Library_Db_Migration{
+namespace Library\Db;
+
+class Migration{
 
     public $version = '';
 
@@ -13,7 +15,7 @@ class Library_Db_Migration{
     }
 
     public function __call($name, $arguments) {
-        $c = Library_Db_Adapter::getInstance();
+        $c = \Library\Db\Adapter::getInstance();
         return call_user_func_array(array($c, $name), $arguments);
     }
 }

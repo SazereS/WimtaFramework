@@ -1,6 +1,8 @@
 <?php
 
-class Library_Registry extends Library_Singleton{
+namespace Library;
+
+class Registry extends \Library\Singleton{
 
     protected $_data;
 

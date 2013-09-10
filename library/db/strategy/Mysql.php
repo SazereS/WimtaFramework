@@ -1,6 +1,8 @@
 <?php
 
-class Library_Db_Strategy_Mysql extends Library_Db_Strategy_Prototype{
+namespace Library\Db\Strategy;
+
+class Mysql extends \Library\Db\Strategy\Prototype{
 
     public function __construct($host, $dbname, $username, $passwd, $options = NULL) {
         parent::__construct(
@@ -42,9 +44,9 @@ class Library_Db_Strategy_Mysql extends Library_Db_Strategy_Prototype{
         $q .= implode(', ', $q_fields);
         $q .= ', PRIMARY KEY(`' . $primary . '`) ) COLLATE=\'' . $additional_params['collate'] . '\' ENGINE=' . $additional_params['engine'];
         try{
-            Library_Db_Adapter::getInstance()->exec($q);
+            \Library\Db\Adapter::getInstance()->exec($q);
         } catch(PDOException $e){
-            throw new Library_Db_Exception('MIGRATION EXCEPTION! ' . $e->getMessage());
+            throw new \Library\Db\Exception('MIGRATION EXCEPTION! ' . $e->getMessage());
         }
     }
 
@@ -54,9 +56,9 @@ class Library_Db_Strategy_Mysql extends Library_Db_Strategy_Prototype{
 
     public function dropTable($table_name) {
         try{
-            Library_Db_Adapter::getInstance()->exec('DROP TABLE `' . $table_name . '`');
+            \Library\Db\Adapter::getInstance()->exec('DROP TABLE `' . $table_name . '`');
         } catch(PDOException $e){
-            throw new Library_Db_Exception('MIGRATION EXCEPTION! ' . $e->getMessage());
+            throw new \Library\Db\Exception('MIGRATION EXCEPTION! ' . $e->getMessage());
         }
     }
 

@@ -1,16 +1,18 @@
 <?php
 
-class Library_Db_Adapter extends Library_Singleton{
+namespace Library\Db;
+
+class Adapter extends \Library\Singleton{
 
     /**
      *
-     * @var Library_Db_Strategy_Prototype
+     * @var \Library\Db\Strategy\Prototype
      */
     private $_connection;
 
-    public function setStrategy(Library_Db_Strategy_Prototype $strategy) {
+    public function setStrategy(\Library\Db\Strategy\Prototype $strategy) {
         $this->_connection = $strategy;
-        $this->_connection->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+        $this->_connection->setAttribute( \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION );
         return $this;
     }
 
