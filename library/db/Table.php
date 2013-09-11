@@ -25,44 +25,44 @@ class Table{
     }
 
     public function fetchAll($where = NULL, $order = NULL, $limit = NULL){
-        $temp = \Library\Db\Adapter::getInstance()->fetchAll($this->_table, $where, $order, $limit);
+        $temp = Adapter::getInstance()->fetchAll($this->_table, $where, $order, $limit);
         $rows = array();
         while($data = $temp->fetch(\PDO::FETCH_ASSOC)){
-            $rows[] = new \Library\Db\Table\Row($this->_table, $data);
+            $rows[] = new Table\Row($this->_table, $data);
         }
         return $rows;
     }
 
     public function fetchRow($where = NULL, $order = NULL){
-        $temp = \Library\Db\Adapter::getInstance()->fetchRow($where, $order);
+        $temp = Adapter::getInstance()->fetchRow($where, $order);
         $data = $temp->fetch(\PDO::FETCH_ASSOC);
-        return $this->_current = new \Library\Db\Table\Row($this->_table, $data);
+        return $this->_current = new Table\Row($this->_table, $data);
     }
 
     public function getKeyField(){
-        return \Library\Db\Adapter::getInstance()->getKeyField($this->_table);
+        return Adapter::getInstance()->getKeyField($this->_table);
     }
 
     public function find($id){
-        $temp = \Library\Db\Adapter::getInstance()->find($this->_table, $id);
+        $temp = Adapter::getInstance()->find($this->_table, $id);
         if($temp->rowCount() > 0){
             $data = $temp->fetch(\PDO::FETCH_ASSOC);
-            return $this->_current = new \Library\Db\Table\Row($this->_table, $data);
+            return $this->_current = new Table\Row($this->_table, $data);
         } else {
             return false;
         }
     }
 
     public function rowCount($where = NULL, $sort = NULL, $limit = NULL){
-        return \Library\Db\Adapter::getInstance()->rowCount($where, $sort, $limit);
+        return Adapter::getInstance()->rowCount($where, $sort, $limit);
     }
 
     public function insertRow($values = array(), $return_inserted = true){
-        $res = \Library\Db\Adapter::getInstance()->query('SHOW COLUMNS FROM `' . $this->_table . '` WHERE `Field` = \'created_at\'');
+        $res = Adapter::getInstance()->query('SHOW COLUMNS FROM `' . $this->_table . '` WHERE `Field` = \'created_at\'');
         if ($res->rowCount() == 1 AND !isset($values['created_at'])) {
             $values['created_at'] = date('Y-m-d h:i:s');
         }
-        $id = \Library\Db\Adapter::getInstance()->insertRow($this->_table, $values);
+        $id = Adapter::getInstance()->insertRow($this->_table, $values);
         if($return_inserted){
             return $this->find($id);
         }
@@ -74,16 +74,16 @@ class Table{
      * @return \Library\Db\Table\Row
      */
     public function newRow() {
-        return $this->_current = new \Library\Db\Table\Row($this->_table);
+        return $this->_current = new Table\Row($this->_table);
     }
 
     public function updateRow($where = NULL, $values = array()){
-        $temp = \Library\Db\Adapter::getInstance()->updateRow($where, $values);
+        $temp = Adapter::getInstance()->updateRow($where, $values);
         return $temp->rowCount();
     }
 
     public function deleteRows($where = NULL){
-        return \Library\Db\Adapter::getInstance()->deleteRows($where);
+        return Adapter::getInstance()->deleteRows($where);
     }
 
 }

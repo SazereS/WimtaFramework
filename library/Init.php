@@ -2,7 +2,7 @@
 
 namespace Library;
 
-class Init extends \Library\Base{
+class Init extends Base{
 
     public function init(){
         $methods = get_class_methods(get_called_class());

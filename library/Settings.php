@@ -2,7 +2,7 @@
 
 namespace Library;
 
-class Settings extends \Library\Registry{
+class Settings extends Registry{
 
     private $_config;
 

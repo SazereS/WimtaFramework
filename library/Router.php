@@ -38,7 +38,7 @@ class Router{
      */
     private $_request;
 
-    public function __construct(\Library\Request $request){
+    public function __construct(Request $request){
         $this->_request = $request;
     }
 

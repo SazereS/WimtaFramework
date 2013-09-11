@@ -15,7 +15,7 @@ class Migration{
     }
 
     public function __call($name, $arguments) {
-        $c = \Library\Db\Adapter::getInstance();
+        $c = Adapter::getInstance();
         return call_user_func_array(array($c, $name), $arguments);
     }
 }

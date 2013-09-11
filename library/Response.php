@@ -12,7 +12,7 @@ class Response{
     private $_layout;
 
     public function __construct() {
-        $this->_layout = new \Library\View\Layout();
+        $this->_layout = new View\Layout();
     }
 
     public function writeContent(){
@@ -33,10 +33,10 @@ class Response{
         return $this->_layout;
     }
 
-    public function renderLayout(\Library\View $view){
+    public function renderLayout(View $view){
         $this->setContent(
                 $this->_layout->render(
-                        ($layout = \Library\Settings::getInstance()->default_layout)
+                        ($layout = Settings::getInstance()->default_layout)
                         ? $layout
                         : 'default',
                         array_merge(

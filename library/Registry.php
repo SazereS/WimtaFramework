@@ -2,7 +2,7 @@
 
 namespace Library;
 
-class Registry extends \Library\Singleton{
+class Registry extends Singleton{
 
     protected $_data;
 

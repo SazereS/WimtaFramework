@@ -2,7 +2,7 @@
 
 namespace Library;
 
-class View extends \Library\Base{
+class View extends Base{
 
     protected $_out    = array();
     protected $_path   = '';
@@ -31,7 +31,7 @@ class View extends \Library\Base{
     public function render($file, $out = array()){
         $path = $this->_path . DIRECTORY_SEPARATOR . $file . '.phtml';
         if(!file_exists($path)){
-            throw new \Library\View\Exception('Cannot find view file: "' . $path . '"');
+            throw new View\Exception('Cannot find view file: "' . $path . '"');
         }
         extract(array_merge($out, $this->_out), EXTR_OVERWRITE);
         ob_start();

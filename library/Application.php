@@ -52,32 +52,32 @@ class Application{
                     . $class
                     . '.php';
             if(!file_exists($full_path)){
-                throw new \Library\Autoloader\Exception('Can\'t load class "' . $class . '": File not exists!');
+                throw new Autoloader\Exception('Can\'t load class "' . $class . '": File not exists!');
             }
             require_once ($full_path);
         });
-        $this->_helpers = new \Library\Base();
+        $this->_helpers = new Base();
     }
 
     public function initDbAdapter() {
-        $strategy = new \Library\Db\Strategy\Mysql(
+        $strategy = new Db\Strategy\Mysql(
                 'localhost',
                 'test',
                 'root',
                 ''
                 );
-        \Library\Db\Adapter::getInstance()->setStrategy($strategy);
+        Db\Adapter::getInstance()->setStrategy($strategy);
         $strategy = false;
-        if(\Library\Settings::getInstance()->db_driver == 'mysql'){
-            $strategy = new \Library\Db\Strategy\Mysql(
-                    \Library\Settings::getInstance()->db_mysql_host,
-                    \Library\Settings::getInstance()->db_mysql_dbname,
-                    \Library\Settings::getInstance()->db_mysql_login,
-                    \Library\Settings::getInstance()->db_mysql_password
+        if(Settings::getInstance()->db_driver == 'mysql'){
+            $strategy = new Db\Strategy\Mysql(
+                    Settings::getInstance()->db_mysql_host,
+                    Settings::getInstance()->db_mysql_dbname,
+                    Settings::getInstance()->db_mysql_login,
+                    Settings::getInstance()->db_mysql_password
             );
         }
         if($strategy){
-            \Library\Db\Adapter::getInstance()->setStrategy($strategy);
+            Db\Adapter::getInstance()->setStrategy($strategy);
         }
         return $this;
     }
@@ -85,16 +85,16 @@ class Application{
     public function run(){
         $init = new \Application\Init();
         $init->preInit();
-        $this->_request  = new \Library\Request();
-        $this->_response = new \Library\Response();
-        \Library\Registry::getInstance()
+        $this->_request  = new Request();
+        $this->_response = new Response();
+        Registry::getInstance()
                 ->set('request', $this->_request)
                 ->set('response', $this->_response);
-        $this->_router   = new \Library\Router($this->_request);
+        $this->_router   = new Router($this->_request);
         $this->_router->findRoute();
         $this->initDbAdapter();
         $init->init();
-        $view = new \Library\View(
+        $view = new View(
                 APPLICATION_PATH
                 . 'views'
                 . DIRECTORY_SEPARATOR
@@ -114,7 +114,7 @@ class Application{
     }
 
     public function setConfig($config, $mode = 'production'){
-        \Library\Settings::getInstance()->setConfig((string) $config)->loadConfig($mode);
+        Settings::getInstance()->setConfig((string) $config)->loadConfig($mode);
         return $this;
     }
 
@@ -128,7 +128,7 @@ class Application{
 
     public function loadController($controller_name, $view = NULL){
         if($view == NULL){
-            $view = new \Library\View();
+            $view = new View();
         }
         $controller_name =
                 '\\Application\\Controllers\\'
@@ -137,8 +137,8 @@ class Application{
         try{
             $this->_controller = new $controller_name;
             $this->_controller->view = $view;
-        } catch(\Library\Autoloader\Exception $e){
-            throw new \Library\Application\Exception('Cannot find controller class "' . $controller_name . '"');
+        } catch(Autoloader\Exception $e){
+            throw new Application\Exception('Cannot find controller class "' . $controller_name . '"');
         }
         return $this;
     }
@@ -148,7 +148,7 @@ class Application{
         if(method_exists($this->_controller, $action_name)){
             return $this->_controller->$action_name();
         } else {
-            throw new \Library\Controller\Exception('Controller "' . $this->_request->getController() . '" hasn\'t got method "' . $action_name . '"');
+            throw new Controller\Exception('Controller "' . $this->_request->getController() . '" hasn\'t got method "' . $action_name . '"');
         }
     }
 

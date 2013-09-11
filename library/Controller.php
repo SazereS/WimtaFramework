@@ -2,7 +2,7 @@
 
 namespace Library;
 
-class Controller extends \Library\Base{
+class Controller extends Base{
 
     protected $_vars = array();
 
@@ -28,7 +28,7 @@ class Controller extends \Library\Base{
      * @return \Library\Request
      */
     public function getRequest(){
-        return \Library\Registry::getInstance()->request;
+        return Registry::getInstance()->request;
     }
 
     /**
@@ -36,7 +36,7 @@ class Controller extends \Library\Base{
      * @return \Library\Response
      */
     public function getResponse(){
-        return \Library\Registry::getInstance()->response;
+        return Registry::getInstance()->response;
     }
 
     public function getParam($name) {

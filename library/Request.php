@@ -16,8 +16,8 @@ class Request {
         return ($this->params['controller'])
                 ? $this->params['controller']
                 : (
-                        (\Library\Settings::getInstance()->default_controller)
-                        ? \Library\Settings::getInstance()->default_controller
+                        (Settings::getInstance()->default_controller)
+                        ? Settings::getInstance()->default_controller
                         : 'index'
                         );
     }
@@ -26,8 +26,8 @@ class Request {
         return ($this->params['action'])
                 ? $this->params['action']
                 : (
-                        (\Library\Settings::getInstance()->default_action)
-                        ? \Library\Settings::getInstance()->default_action
+                        (Settings::getInstance()->default_action)
+                        ? Settings::getInstance()->default_action
                         : 'index'
                         );
     }

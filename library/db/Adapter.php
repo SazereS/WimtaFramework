@@ -17,7 +17,7 @@ class Adapter extends \Library\Singleton{
         return parent::getInstance();
     }
 
-    public function setStrategy(\Library\Db\Strategy\Prototype $strategy) {
+    public function setStrategy(Strategy\Prototype $strategy) {
         $this->_connection = $strategy;
         $this->_connection->setAttribute( \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION );
         return $this;

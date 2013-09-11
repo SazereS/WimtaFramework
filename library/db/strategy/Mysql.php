@@ -2,7 +2,7 @@
 
 namespace Library\Db\Strategy;
 
-class Mysql extends \Library\Db\Strategy\Prototype{
+class Mysql extends Prototype{
 
     public function __construct($host, $dbname, $username, $passwd, $options = NULL) {
         parent::__construct(
