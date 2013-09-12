@@ -62,20 +62,11 @@ class Application
         $this->_helpers = new Base();
     }
 
+    /**
+     * @todo Удалить этот метод
+     */
     public function initDbAdapter()
     {
-        $strategy = false;
-        if (Settings::getInstance()->db_driver == 'mysql') {
-            $strategy = new Db\Strategy\Mysql(
-                Settings::getInstance()->db_mysql_host,
-                Settings::getInstance()->db_mysql_dbname,
-                Settings::getInstance()->db_mysql_login,
-                Settings::getInstance()->db_mysql_password
-            );
-        }
-        if ($strategy) {
-            Db\Adapter::getInstance()->setStrategy($strategy);
-        }
         return $this;
     }
 
@@ -90,7 +81,6 @@ class Application
         $init->preInit();
         $this->_router   = new Router($this->_request);
         $this->_router->findRoute();
-        $this->initDbAdapter();
         $init->init();
         $view            = new View(
             APPLICATION_PATH

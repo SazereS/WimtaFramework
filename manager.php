@@ -7,15 +7,19 @@ $templates = array(
     'controller'        => '<?php
 
 namespace Application\\Controllers;
+
 use \\Application\\Models;
 
-class %sController extends \\Library\\Controller{
+class %sController extends \\Library\\Controller
+{
 
-    public function init(){
+    public function init()
+    {
         // Initialization code here
     }
 
-    public function indexAction(){
+    public function indexAction()
+    {
         // Default action code
     }
 
@@ -23,7 +27,8 @@ class %sController extends \\Library\\Controller{
 ',
     'controller_action' => '
 
-    public function %sAction(){
+    public function %sAction()
+    {
         // Put your code here
     }
 
@@ -36,15 +41,18 @@ class %sController extends \\Library\\Controller{
 
 namespace Application\\Migrations;
 
-class Migration%s extends \\Library\\Db\\Migration{
+class Migration%s extends \\Library\\Db\\Migration
+{
 
     public $version = \'%s\';
 
-    public function apply() {
+    public function apply()
+    {
 
     }
 
-    public function rollback() {
+    public function rollback()
+    {
 
     }
 
@@ -54,9 +62,11 @@ class Migration%s extends \\Library\\Db\\Migration{
 
 namespace Application\\Models;
 
-class %s extends \\Library\\Db\\Table{
+class %s extends \\Library\\Db\\Table
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->_table = \'%s\';
     }
 
