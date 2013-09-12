@@ -2,7 +2,8 @@
 
 namespace Library\Db\Table;
 
-class Row implements \IteratorAggregate{
+class Row implements \IteratorAggregate
+{
 
     protected $_new = false;
     protected $_cells;
@@ -10,15 +11,21 @@ class Row implements \IteratorAggregate{
     protected $_id_field;
     protected $_id;
 
-    public function __construct($table, array $cells = NULL) {
+    public function __construct($table, array $cells = NULL)
+    {
         $this->_table    = $table;
         $this->_id_field = \Library\Db\Adapter::getInstance()->getKeyField($this->_table);
         $this->_id       = $cells[$this->_id_field];
-        if(is_null($cells)){
+        if (is_null($cells)) {
             $this->_cells = array();
-            $this->_new = true;
-            $res = \Library\Db\Adapter::getInstance()->query('SHOW COLUMNS FROM `' . $this->_table . '` WHERE `Field` = \'created_at\'');
-            if($res->rowCount() == 1){
+            $this->_new   = true;
+            $res          = \Library\Db\Adapter::getInstance()
+                ->query(
+                    'SHOW COLUMNS FROM `'
+                    . $this->_table
+                    . '` WHERE `Field` = \'created_at\''
+                );
+            if ($res->rowCount() == 1) {
                 $this->_cells['created_at'] = date('Y-m-d h:i:s');
             }
         } else {
@@ -27,55 +34,76 @@ class Row implements \IteratorAggregate{
         }
     }
 
-    public function __set($name, $value) {
-        if($name == $this->_id_field){
+    public function __set($name, $value)
+    {
+        if ($name == $this->_id_field) {
             throw new \Library\Db\Exception('Cannot change primary key value!');
         }
         $this->_cells[$name] = $value;
         return $this;
     }
 
-    public function __get($name) {
-        if($name == $this->_id_field){
+    public function __get($name)
+    {
+        if ($name == $this->_id_field) {
             return $this->_id;
         }
         return $this->_cells[$name];
     }
 
-    public function getKeyField(){
+    public function getKeyField()
+    {
         return $this->_id_field;
     }
 
-    public function getKey(){
+    public function getKey()
+    {
         return $this->_id;
     }
 
-    public function toArray(){
+    public function toArray()
+    {
         return (array) $this->_cells;
     }
 
-    public function save(){
-        if($this->_new){
-            try{
-                $id = \Library\Db\Adapter::getInstance()->insertRow($this->_table, $this->_cells);
-                $this->_new = false;
-                $res = \Library\Db\Adapter::getInstance()->find($this->_table, $id);
-                $cells = $res->fetch(\PDO::FETCH_ASSOC);
-                $this->_id = $cells[$this->_id_field];
+    public function save()
+    {
+        if ($this->_new) {
+            try {
+                $id           = \Library\Db\Adapter::getInstance()->insertRow(
+                    $this->_table,
+                    $this->_cells
+                );
+                $this->_new   = false;
+                $res          = \Library\Db\Adapter::getInstance()
+                    ->find(
+                        $this->_table,
+                        $id
+                    );
+                $cells        = $res->fetch(\PDO::FETCH_ASSOC);
+                $this->_id    = $cells[$this->_id_field];
                 unset($cells[$this->_id_field]);
                 $this->_cells = $cells;
-            }  catch (\Library\Db\Exception $e){
+            } catch (\Library\Db\Exception $e) {
                 throw new \Library\Db\Exception($e->getMessage());
                 return false;
             }
         } else {
-            $where = '`' . $this->_id_field . '` = ' . \Library\Db\Adapter::getInstance()->quote($this->_id);
-            if(isset($this->_cells['updated_at'])){
+            $where = '`'
+                . $this->_id_field
+                . '` = '
+                . \Library\Db\Adapter::getInstance()->quote($this->_id);
+            if (isset($this->_cells['updated_at'])) {
                 unset($this->_cells['updated_at']);
             }
-            try{
-                \Library\Db\Adapter::getInstance()->updateRow($this->_table, $where, $this->_cells);
-            }  catch (\Library\Db\Exception $e){
+            try {
+                \Library\Db\Adapter::getInstance()
+                    ->updateRow(
+                        $this->_table,
+                        $where,
+                        $this->_cells
+                    );
+            } catch (\Library\Db\Exception $e) {
                 throw new \Library\Db\Exception($e->getMessage());
                 return false;
             }
@@ -83,18 +111,23 @@ class Row implements \IteratorAggregate{
         return $this;
     }
 
-    public function delete(){
-        $where = '`' . $this->_id_field . '` = ' . \Library\Db\Adapter::getInstance()->quote($this->_id);
-        try{
+    public function delete()
+    {
+        $where = '`'
+            . $this->_id_field
+            . '` = '
+            . \Library\Db\Adapter::getInstance()->quote($this->_id);
+        try {
             \Library\Db\Adapter::getInstance()->deleteRows($this->_table, $where);
-        }  catch (\Library\Db\Exception $e){
+        } catch (\Library\Db\Exception $e) {
             throw new \Library\Db\Exception($e->getMessage());
             return false;
         }
         return true;
     }
 
-    public function getIterator() {
+    public function getIterator()
+    {
         return new \ArrayIterator($this->_cells);
     }
 

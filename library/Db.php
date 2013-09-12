@@ -2,6 +2,7 @@
 
 namespace Library;
 
-class Db{
+class Db
+{
 
 }

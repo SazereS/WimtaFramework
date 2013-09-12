@@ -1,29 +1,35 @@
 <?php
 
 namespace Application\Controllers;
+
 use \Application\Models\Articles;
 
-class ArticlesController extends \Library\Controller{
+class ArticlesController extends \Library\Controller
+{
 
-    public function init(){
+    public function init()
+    {
+
     }
 
-    public function indexAction(){
-        $articles = new Articles();
+    public function indexAction()
+    {
+        $articles             = new Articles();
         $this->view->articles = $articles->fetchAll();
     }
 
-    public function newAction(){
+    public function newAction()
+    {
         $this->view->post = array();
-        if($this->isPost()){
+        if ($this->isPost()) {
             $post = $this->getPost();
-            if($post['title'] AND $post['text']){
-                $articles = new Articles();
-                $row = $articles->newRow();
+            if ($post['title'] AND $post['text']) {
+                $articles   = new Articles();
+                $row        = $articles->newRow();
                 $row->text  = $post['text'];
                 $row->title = $post['title'];
                 $row->save();
-                if($row->id){
+                if ($row->id) {
                     $this->redirect('article/' . $row->id);
                 }
             }
@@ -31,10 +37,11 @@ class ArticlesController extends \Library\Controller{
         }
     }
 
-    public function viewAction(){
+    public function viewAction()
+    {
         $articles = new Articles();
-        if($id = $this->getParam('id')){
-            if($articles->find($id)){
+        if ($id = $this->getParam('id')) {
+            if ($articles->find($id)) {
                 $this->view->article = $articles->getCurrent();
             } else {
                 die('Error 404');
@@ -44,20 +51,21 @@ class ArticlesController extends \Library\Controller{
         }
     }
 
-    public function editAction(){
+    public function editAction()
+    {
         $articles = new Articles();
-        if($id = $this->getParam('id')){
-            if($articles->find($id)){
+        if ($id = $this->getParam('id')) {
+            if ($articles->find($id)) {
                 $article = $articles->getCurrent();
 
                 $this->view->post = $article->toArray();
-                if($this->isPost()){
+                if ($this->isPost()) {
                     $post = $this->getPost();
-                    if($post['title'] AND $post['text']){
+                    if ($post['title'] AND $post['text']) {
                         $article->text  = $post['text'];
                         $article->title = $post['title'];
                         $article->save();
-                        if($article->id){
+                        if ($article->id) {
                             $this->redirect('article/' . $article->id);
                         }
                     }
@@ -72,10 +80,11 @@ class ArticlesController extends \Library\Controller{
         }
     }
 
-    public function deleteAction(){
+    public function deleteAction()
+    {
         $articles = new Articles();
-        if($id = $this->getParam('id')){
-            if($articles->find($id)){
+        if ($id = $this->getParam('id')) {
+            if ($articles->find($id)) {
                 $articles->getCurrent()->delete();
             }
         }

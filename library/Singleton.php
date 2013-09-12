@@ -2,19 +2,23 @@
 
 namespace Library;
 
-class Singleton{
+class Singleton
+{
 
     private static $_instances;
 
-    protected function __construct() {
+    protected function __construct()
+    {
 
     }
 
-    private function __clone() {
+    private function __clone()
+    {
 
     }
 
-    public static function getInstance() {
+    public static function getInstance()
+    {
         $class = get_called_class();
         if (!isset(self::$_instances[$class])) {
             self::$_instances[$class] = new $class;

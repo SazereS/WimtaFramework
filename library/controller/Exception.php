@@ -2,6 +2,7 @@
 
 namespace Library\Controller;
 
-class Exception extends \Library\Exception{
+class Exception extends \Library\Exception
+{
 
 }

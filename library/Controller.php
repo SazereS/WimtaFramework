@@ -2,24 +2,28 @@
 
 namespace Library;
 
-class Controller extends Base{
+class Controller extends Base
+{
 
     protected $_vars = array();
 
     /**
      * @var \Library\View;
      */
-    public  $view;
+    public $view;
 
-    public function init(){
+    public function init()
+    {
 
     }
 
-    public function __get($name) {
+    public function __get($name)
+    {
         return $this->_vars[$name];
     }
 
-    public function __set($name, $value) {
+    public function __set($name, $value)
+    {
         return $this->_vars[$name] = $value;
     }
 
@@ -27,7 +31,8 @@ class Controller extends Base{
      *
      * @return \Library\Request
      */
-    public function getRequest(){
+    public function getRequest()
+    {
         return Registry::getInstance()->request;
     }
 
@@ -35,11 +40,14 @@ class Controller extends Base{
      *
      * @return \Library\Response
      */
-    public function getResponse(){
+    public function getResponse()
+    {
         return Registry::getInstance()->response;
     }
 
-    public function getParam($name) {
+    public function getParam($name)
+    {
         return $this->getRequest()->params[$name];
     }
+
 }

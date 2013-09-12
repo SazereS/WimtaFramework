@@ -2,6 +2,7 @@
 
 namespace Library\Autoloader;
 
-class Exception extends \Library\Exception{
+class Exception extends \Library\Exception
+{
 
 }

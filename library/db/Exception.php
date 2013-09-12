@@ -2,6 +2,7 @@
 
 namespace Library\Db;
 
-class Exception extends \Library\Exception{
+class Exception extends \Library\Exception
+{
 
 }

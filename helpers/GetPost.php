@@ -2,8 +2,12 @@
 
 namespace Helpers;
 
-class GetPost{
-    public static function getPost(){
+class GetPost
+{
+
+    public static function getPost()
+    {
         return $_POST;
     }
+
 }

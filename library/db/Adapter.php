@@ -2,7 +2,8 @@
 
 namespace Library\Db;
 
-class Adapter extends \Library\Singleton{
+class Adapter extends \Library\Singleton
+{
 
     /**
      *
@@ -13,17 +14,23 @@ class Adapter extends \Library\Singleton{
     /**
      * @return Strategy\Prototype;
      */
-    public static function getInstance(){
+    public static function getInstance()
+    {
         return parent::getInstance();
     }
 
-    public function setStrategy(Strategy\Prototype $strategy) {
+    public function setStrategy(Strategy\Prototype $strategy)
+    {
         $this->_connection = $strategy;
-        $this->_connection->setAttribute( \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION );
+        $this->_connection->setAttribute(
+            \PDO::ATTR_ERRMODE,
+            \PDO::ERRMODE_EXCEPTION
+        );
         return $this;
     }
 
-    public function __call($name, $arguments) {
+    public function __call($name, $arguments)
+    {
         $c = $this->_connection;
         return call_user_func_array(array($c, $name), $arguments);
     }

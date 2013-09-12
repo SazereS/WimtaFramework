@@ -2,21 +2,28 @@
 
 namespace Library\Db\Strategy;
 
-class Prototype extends \PDO{
-
+class Prototype extends \PDO
+{
 
     protected $_prepared = array();
     protected $_keys     = array();
 
-    public function __construct($dsn, $username = NULL, $passwd = NULL, $options = NULL) {
-        try{
+    public function __construct(
+        $dsn,
+        $username = NULL,
+        $passwd   = NULL,
+        $options  = NULL
+    )
+    {
+        try {
             parent::__construct($dsn, $username, $passwd, $options);
-        }catch(\PDOException $e){
+        } catch (\PDOException $e) {
             throw new \Library\Db\Exception($e->getMessage());
         }
     }
 
-    public function fetchAll($table, $where = NULL, $order = NULL, $limit = NULL){
+    public function fetchAll($table, $where = NULL, $order = NULL, $limit = NULL)
+    {
         $where = ($where) ? ' WHERE ' . $where : '';
         $order = ($order) ? ' ORDER BY ' . $order : '';
         $limit = ($limit) ? ' LIMIT ' . $limit : '';
@@ -24,23 +31,28 @@ class Prototype extends \PDO{
         return $this->query($q);
     }
 
-    public function fetchRow($table, $where = NULL, $order = NULL){
+    public function fetchRow($table, $where = NULL, $order = NULL)
+    {
         return $this->fetchAll($table, $where, $order, 1);
     }
 
-    public function getKeyField($table){
-        if(!$this->_keys[$table]){
-            $query = $this->query('SHOW COLUMNS FROM `' . $table . '` WHERE `key`=\'pri\'');
-            $res   = $query->fetchAll();
+    public function getKeyField($table)
+    {
+        if (!$this->_keys[$table]) {
+            $query               = $this->query(
+                'SHOW COLUMNS FROM `' . $table . '` WHERE `key`=\'pri\''
+            );
+            $res                 = $query->fetchAll();
             $this->_keys[$table] = $res[0]['Field'];
         }
         return $this->_keys[$table];
     }
 
-    public function find($table, $id){
+    public function find($table, $id)
+    {
         $field = $this->getKeyField($table);
         $q     = 'SELECT * FROM `' . $table . '` WHERE `' . $field . '` = ?';
-        if(!$this->_prepared[$q]){
+        if (!$this->_prepared[$q]) {
             $this->_prepared[$q] = $this->prepare($q);
         }
         try {
@@ -51,7 +63,8 @@ class Prototype extends \PDO{
         }
     }
 
-    public function rowCount($table, $where = NULL, $sort = NULL, $limit = NULL){
+    public function rowCount($table, $where = NULL, $sort = NULL, $limit = NULL)
+    {
         $where   = ($where) ? ' WHERE ' . $where : '';
         $sort    = ($sort) ? ' ORDER BY ' . $sort : '';
         $limit   = ($limit) ? ' LIMIT ' . $limit : '';
@@ -61,38 +74,40 @@ class Prototype extends \PDO{
         return $fetched[0];
     }
 
-    public function insertRow($table, $values = array()){
-        $anchors = $cols = array();
+    public function insertRow($table, $values = array())
+    {
+        $anchors = $cols    = array();
         foreach ($values as $k => $v) {
-            $cols   []         = $k;
-            $anchors[]         = ':' . $k;
+            $cols   [] = $k;
+            $anchors[] = ':' . $k;
         }
         $q = 'INSERT INTO `'
-                . $table
-                . '` (`'
-                . implode('`, `', $cols)
-                . '`) VALUES ('
-                . implode(', ', $anchors)
-                . ')';
-        if(!$this->_prepared[$q]){
+            . $table
+            . '` (`'
+            . implode('`, `', $cols)
+            . '`) VALUES ('
+            . implode(', ', $anchors)
+            . ')';
+        if (!$this->_prepared[$q]) {
             $this->_prepared[$q] = $this->prepare($q);
         }
-        try{
+        try {
             $this->_prepared[$q]->execute($values);
             return $this->lastInsertId();
-        }  catch (\PDOException $e){
+        } catch (\PDOException $e) {
             throw new \Library\Db\Exception($e->getMessage());
         }
     }
 
-    public function updateRow($table, $where = NULL, $values = array()){
+    public function updateRow($table, $where = NULL, $values = array())
+    {
         $where = ($where) ? ' WHERE ' . $where : '';
-        $vals = array();
+        $vals  = array();
         foreach ($values as $k => $v) {
             $vals[] = '`' . $k . '`' . '= :' . $k;
         }
         $q = 'UPDATE ' . $table . ' SET ' . implode(', ', $vals) . $where;
-        if(!$this->_prepared[$q]){
+        if (!$this->_prepared[$q]) {
             $this->_prepared[$q] = $this->prepare($q);
         }
         try {
@@ -103,7 +118,8 @@ class Prototype extends \PDO{
         }
     }
 
-    public function deleteRows($table, $where = NULL){
+    public function deleteRows($table, $where = NULL)
+    {
         $where = ($where) ? ' WHERE ' . $where : '';
         return $this->exec('DELETE FROM `' . $table . '`' . $where);
     }
@@ -111,21 +127,24 @@ class Prototype extends \PDO{
     public function createTable(
         $table_name,
         array $fields,
-        $use_default_fields = true,
-        $primary = 'id',
+        $use_default_fields      = true,
+        $primary                 = 'id',
         array $additional_params = array()
-    ){
+    )
+    {
         # Just interface-like method (need to be overloaded by strategy's methods)
     }
 
-    public function updateTable() {
+    public function updateTable()
+    {
         # Just interface-like method (need to be overloaded by strategy's methods)
     }
 
-    public function dropTable($table_name) {
-        try{
+    public function dropTable($table_name)
+    {
+        try {
             \Library\Db\Adapter::getInstance()->exec('DROP TABLE `' . $table_name . '`');
-        } catch(PDOException $e){
+        } catch (PDOException $e) {
             throw new \Library\Db\Exception($e->getMessage());
         }
     }
