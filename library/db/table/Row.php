@@ -7,6 +7,9 @@ class Row implements \IteratorAggregate
 
     protected $_new = false;
     protected $_cells;
+    protected $_belongs_to;
+    protected $_has_many;
+    protected $_joined = array('has_many' => array());
 
     /**
      *
@@ -38,6 +41,10 @@ class Row implements \IteratorAggregate
             unset($cells[$this->getKeyField()]);
             $this->_cells = $cells;
         }
+        foreach ($this->_table->getJoined() as $table => $has_many) {
+            $this->_has_many[($has_many['as']) ? $has_many['as'] : $table] = $table;
+        }
+
     }
 
     public function __set($name, $value)
@@ -53,6 +60,20 @@ class Row implements \IteratorAggregate
     {
         if ($name == $this->getKeyField()) {
             return $this->_id;
+        } elseif(isset($this->_has_many[$name])){
+            if(!$this->_joined['has_many'][$name]){
+                $class = '\\Application\\Models\\'
+                    . \Helpers\GetRealName::getRealName($this->_has_many[$name]);
+                $model = new $class();
+                $has_many = $this->_table->getJoined();
+                $this->_joined['has_many'][$name] = $model->fetchAll(
+                    '`'
+                    . $has_many[$this->_has_many[$name]]['public_key']
+                    . '` = '
+                    . \Library\Db\Adapter::getInstance()->quote($this->getKey())
+                );
+                return $this->_joined['has_many'][$name];
+            }
         }
         return $this->_cells[$name];
     }

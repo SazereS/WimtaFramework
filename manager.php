@@ -191,7 +191,7 @@ function migrate()
     echo 'Migration process started!', PHP_EOL;
     require_once('library/Application.php');
     $application = new \Library\Application();
-    $application->setConfig('default', 'development')->initDbAdapter();
+    $application->setConfig('default', 'development');
     if (file_exists('./application/migrations/version')) {
         $version = file_get_contents('./application/migrations/version');
         unlink('./application/migrations/version');
@@ -233,7 +233,7 @@ function rollback($target = NULL)
     echo 'Migration rollback started!', PHP_EOL;
     require_once('library/Application.php');
     $application = new \Library\Application();
-    $application->setConfig('default', 'development')->initDbAdapter();
+    $application->setConfig('default', 'development');
     if (file_exists('./application/migrations/version')) {
         $version = file_get_contents('./application/migrations/version');
         unlink('./application/migrations/version');
@@ -340,7 +340,7 @@ switch (strtolower(@$argv[1])) {
         echo 'WIMTA Generating tools' . PHP_EOL . PHP_EOL;
         echo '    create' . PHP_EOL;
         echo '        controller  <controller-name>' . PHP_EOL;
-        echo '        *action     <controller-name> <action-name>' . PHP_EOL;
+        echo '        action     <controller-name> <action-name>' . PHP_EOL;
         echo '        *view       <custom-view-name>' . PHP_EOL;
         echo '        *layout     <layout-name>' . PHP_EOL;
         echo PHP_EOL;
@@ -350,5 +350,6 @@ switch (strtolower(@$argv[1])) {
         echo '        create' . PHP_EOL;
         echo '            migration' . PHP_EOL;
         echo '            model     <table-name>' . PHP_EOL;
+        echo PHP_EOL;
         break;
 }

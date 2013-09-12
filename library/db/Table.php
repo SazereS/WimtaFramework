@@ -31,6 +31,15 @@ class Table
         return $this->_current;
     }
 
+    public function getJoined($type = 'has_many')
+    {
+        if ($type == 'belongs_to') {
+            return $this->_belongs_to;
+        } else {
+            return $this->_has_many;
+        }
+    }
+
     public function fetchAll($where = NULL, $order = NULL, $limit = NULL)
     {
         $temp = Adapter::getInstance()

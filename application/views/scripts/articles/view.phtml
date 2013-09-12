@@ -4,3 +4,7 @@
 <h3><?=$this->article->title ?></h3>
 <p><?=$this->article->text ?></p>
 <a href="<?=$this->baseUrl('articles') ?>">&larr; Back to list</a>
+<?php foreach($article->comments as $comment): ?>
+<h5><?=$comment->author ?></h5>
+<p><?=$comment->text ?></p>
+<?php endforeach; ?>
