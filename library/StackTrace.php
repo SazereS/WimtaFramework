@@ -2,7 +2,7 @@
 
 namespace Library;
 
-class StackTrace
+class StackTrace extends Singleton
 {
 
     private $_message;
@@ -51,15 +51,13 @@ class StackTrace
         '
     );
 
-    public function __construct($message)
+    public function construct($message)
     {
         $this->_message = $message;
-        $this->_limit   = (Settings::getInstance()->debug_stacktrace_limit)
-            ? Settings::getInstance()->debug_stack_limit
-            : 10;
+        $this->_limit   = (Settings::getInstance()->debug_stacktrace_limit) ? Settings::getInstance()->debug_stack_limit
+                : 10;
         $this->_stack   = debug_backtrace(
-            DEBUG_BACKTRACE_PROVIDE_OBJECT,
-            $this->_limit
+            DEBUG_BACKTRACE_PROVIDE_OBJECT, $this->_limit
         );
     }
 
@@ -73,6 +71,10 @@ class StackTrace
                 . '</pre>';
         } else {
             foreach ($this->_stack as $id => $trace) {
+                $args = array();
+                foreach($trace['args'] as $arg){
+                    $args[] = print_r($arg, true);
+                }
                 $stack[] = sprintf(
                     $this->_decorators['each'],
                     sprintf(
@@ -88,7 +90,8 @@ class StackTrace
                         . $trace['type']
                         . $trace['function']
                         . '(<br>'
-                        . implode(',<br>', $trace['args'])
+                        //. print_r($trace['args'], true)
+                        . implode(',<br>', $args)
                         . '<br>)'
                     )
                 );
@@ -102,13 +105,17 @@ class StackTrace
         return $this;
     }
 
+    public function getStackTrace()
+    {
+        return $this->_formatted;
+    }
+
     public function show()
     {
         if (Settings::getInstance()->debug_stacktrace == 'off') {
             return;
         }
         echo $this->_formatted;
-        die();
     }
 
 }

@@ -19,4 +19,4 @@ require_once(LIBRARY_PATH . 'Application.php');
 $application = new \Library\Application();
 $application->setConfig('default', 'development')->run();
 
- echo $application->getElapsedTime();
+# echo $application->getElapsedTime();

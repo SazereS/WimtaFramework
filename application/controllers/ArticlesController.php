@@ -16,6 +16,7 @@ class ArticlesController extends \Library\Controller
     {
         $articles             = new Articles();
         $this->view->articles = $articles->fetchAll();
+        // $this->getResponse()->setFormat(\Library\Response::FORMAT_XML);
     }
 
     public function newAction()
@@ -44,7 +45,7 @@ class ArticlesController extends \Library\Controller
             if ($articles->find($id)) {
                 $this->view->article = $articles->getCurrent();
             } else {
-                die('Error 404');
+                $this->page404();
             }
         } else {
             $this->redirect('articles');

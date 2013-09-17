@@ -34,6 +34,7 @@ class Application
      * @var \Library\Controller
      */
     private $_controller;
+    private $_stack;
 
     public function __construct()
     {
@@ -59,17 +60,16 @@ class Application
                 }
                 require_once ($full_path);
             });
+        set_exception_handler(function($exception){
+                StackTrace::getInstance()->build()->show();
+        });
         $this->_helpers = new Base();
     }
 
     /**
-     * @todo Удалить этот метод
+     *
+     * @return \Library\Application
      */
-    public function initDbAdapter()
-    {
-        return $this;
-    }
-
     public function run()
     {
         $init            = new \Application\Init();
@@ -103,6 +103,12 @@ class Application
         return $this;
     }
 
+    /**
+     *
+     * @param string $config
+     * @param string $mode
+     * @return \Library\Application
+     */
     public function setConfig($config, $mode = 'production')
     {
         Settings::getInstance()
@@ -111,16 +117,31 @@ class Application
         return $this;
     }
 
+    /**
+     *
+     * @return float
+     */
     public function getElapsedTime()
     {
         return microtime(true) - $this->_start_time;
     }
 
+    /**
+     *
+     * @return Controller
+     */
     public function getController()
     {
         return $this->_controller;
     }
 
+    /**
+     *
+     * @param string $controller_name
+     * @param \Library\View $view
+     * @return \Library\Application
+     * @throws Application\Exception
+     */
     public function loadController($controller_name, $view = NULL)
     {
         if ($view == NULL) {
@@ -134,6 +155,9 @@ class Application
             $this->_controller       = new $controller_name;
             $this->_controller->view = $view;
         } catch (Autoloader\Exception $e) {
+            if(Settings::getInstance()->error_page404){
+                \Helpers\Page404::page404();
+            }
             throw new Application\Exception(
                 'Cannot find controller class "'
                 . $controller_name
@@ -143,6 +167,12 @@ class Application
         return $this;
     }
 
+    /**
+     *
+     * @param string $action_name
+     * @return mixed
+     * @throws Controller\Exception
+     */
     public function runControllerAction($action_name)
     {
         $action_name = $this->_helpers->getRealName($action_name) . 'Action';
@@ -159,6 +189,10 @@ class Application
         }
     }
 
+    /**
+     *
+     * @return \Library\Application
+     */
     public function initController()
     {
         if (method_exists($this->_controller, 'init')) {
