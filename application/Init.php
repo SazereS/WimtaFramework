@@ -1,8 +1,17 @@
 <?php
 
-class Application_Init extends Library_Init{
+namespace Application;
 
-    public function _initTest(){
+class Init extends \Library\Init
+{
+
+    public function _initTest()
+    {
+        \Library\Db\Adapter::getInstance();
+    }
+
+    public function preInit()
+    {
 
     }
 

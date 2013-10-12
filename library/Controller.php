@@ -1,39 +1,53 @@
 <?php
 
-class Library_Controller extends Library_Base{
+namespace Library;
+
+class Controller extends Base
+{
 
     protected $_vars = array();
-    public  $view;
 
-    public function init(){
+    /**
+     * @var \Library\View;
+     */
+    public $view;
+
+    public function init()
+    {
 
     }
 
-    public function __get($name) {
+    public function __get($name)
+    {
         return $this->_vars[$name];
     }
 
-    public function __set($name, $value) {
+    public function __set($name, $value)
+    {
         return $this->_vars[$name] = $value;
     }
 
     /**
      *
-     * @return Library_Request
+     * @return \Library\Request
      */
-    public function getRequest(){
-        return Library_Registry::getInstance()->request;
+    public function getRequest()
+    {
+        return Registry::getInstance()->request;
     }
 
     /**
      *
-     * @return Library_Response
+     * @return \Library\Response
      */
-    public function getResponse(){
-        return Library_Registry::getInstance()->response;
+    public function getResponse()
+    {
+        return Registry::getInstance()->response;
     }
 
-    public function getParam($name) {
+    public function getParam($name)
+    {
         return $this->getRequest()->params[$name];
     }
+
 }

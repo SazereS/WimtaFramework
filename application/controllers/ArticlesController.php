@@ -1,27 +1,36 @@
 <?php
 
-class Application_Controllers_ArticlesController extends Library_Controller{
+namespace Application\Controllers;
 
-    public function init(){
+use \Application\Models\Articles;
+
+class ArticlesController extends \Library\Controller
+{
+
+    public function init()
+    {
 
     }
 
-    public function indexAction(){
-        $articles = new Application_Models_Articles();
+    public function indexAction()
+    {
+        $articles             = new Articles();
         $this->view->articles = $articles->fetchAll();
+        // $this->getResponse()->setFormat(\Library\Response::FORMAT_XML);
     }
 
-    public function newAction(){
+    public function newAction()
+    {
         $this->view->post = array();
-        if($this->isPost()){
+        if ($this->isPost()) {
             $post = $this->getPost();
-            if($post['title'] AND $post['text']){
-                $articles = new Application_Models_Articles();
-                $row = $articles->newRow();
+            if ($post['title'] AND $post['text']) {
+                $articles   = new Articles();
+                $row        = $articles->newRow();
                 $row->text  = $post['text'];
                 $row->title = $post['title'];
                 $row->save();
-                if($row->id){
+                if ($row->id) {
                     $this->redirect('article/' . $row->id);
                 }
             }
@@ -29,15 +38,58 @@ class Application_Controllers_ArticlesController extends Library_Controller{
         }
     }
 
-    public function viewAction(){
-        $articles = new Application_Models_Articles();
-        if($id = $this->getParam('id')){
-            if($articles->find($id)){
+    public function viewAction()
+    {
+        $articles = new Articles();
+        if ($id = $this->getParam('id')) {
+            if ($articles->find($id)) {
                 $this->view->article = $articles->getCurrent();
+            } else {
+                $this->page404();
+            }
+        } else {
+            $this->redirect('articles');
+        }
+    }
+
+    public function editAction()
+    {
+        $articles = new Articles();
+        if ($id = $this->getParam('id')) {
+            if ($articles->find($id)) {
+                $article = $articles->getCurrent();
+
+                $this->view->post = $article->toArray();
+                if ($this->isPost()) {
+                    $post = $this->getPost();
+                    if ($post['title'] AND $post['text']) {
+                        $article->text  = $post['text'];
+                        $article->title = $post['title'];
+                        $article->save();
+                        if ($article->id) {
+                            $this->redirect('article/' . $article->id);
+                        }
+                    }
+                    $this->view->post = $post;
+                }
+                $this->view->render('new');
             } else {
                 die('Error 404');
             }
+        } else {
+            $this->redirect('articles');
         }
+    }
+
+    public function deleteAction()
+    {
+        $articles = new Articles();
+        if ($id = $this->getParam('id')) {
+            if ($articles->find($id)) {
+                $articles->getCurrent()->delete();
+            }
+        }
+        $this->redirect('articles');
     }
 
 }
