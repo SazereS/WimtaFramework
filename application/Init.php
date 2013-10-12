@@ -10,4 +10,9 @@ class Init extends \Library\Init
         \Library\Db\Adapter::getInstance();
     }
 
+    public function preInit()
+    {
+
+    }
+
 }

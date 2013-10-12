@@ -12,7 +12,7 @@ class IndexController extends \Library\Controller
 
     public function indexAction()
     {
-
+        
     }
 
 }

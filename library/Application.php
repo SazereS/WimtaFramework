@@ -34,7 +34,6 @@ class Application
      * @var \Library\Controller
      */
     private $_controller;
-    private $_stack;
 
     public function __construct()
     {
@@ -62,6 +61,7 @@ class Application
             });
         set_exception_handler(function($exception){
                 StackTrace::getInstance()->build()->show();
+                Registry::getInstance()->log->show();
         });
         $this->_helpers = new Base();
     }
@@ -75,14 +75,19 @@ class Application
         $init            = new \Application\Init();
         $this->_request  = new Request();
         $this->_response = new Response();
+        $this->_router   = new Router($this->_request);
+        $log             = new Log();
         Registry::getInstance()
             ->set('request', $this->_request)
-            ->set('response', $this->_response);
+            ->set('response', $this->_response)
+            ->set('router', $this->_router)
+            ->set('log', $log);
+        $log->write('Preinitialisation...');
         $init->preInit();
-        $this->_router   = new Router($this->_request);
         $this->_router->findRoute();
+        $log->write('Initialization...');
         $init->init();
-        $view            = new View(
+        $view = new View(
             APPLICATION_PATH
             . 'views'
             . DIRECTORY_SEPARATOR
@@ -90,16 +95,27 @@ class Application
             . DIRECTORY_SEPARATOR
             . $this->_request->getController()
         );
+        $log->write('Calling ' . $this->_request->getController() . '->' . $this->_request->getAction() . '() ...');
         $this->loadController($this->_request->getController(), $view)
             ->initController()
             ->runControllerAction($this->_request->getAction());
+        $log->write('Rendering...');
         if (!$this->_controller->view->rendered) {
             $this->_controller->view->render($this->_request->getAction());
         }
+        $log->write('Responsing...');
         $this->_response
             ->renderLayout($this->_controller->view)
             ->writeContent();
+        $log->write('Postinitialization...');
         $init->postInit();
+        $log->writeSuccess('Application successfully executed for ' . $this->getElapsedTime() . ' seconds!');
+        if(
+            (Settings::getInstance()->debug_log_show == true)
+            AND ($this->_response->getFormat() == Response::FORMAT_HTML)
+        ){
+            $log->show();
+        }
         return $this;
     }
 

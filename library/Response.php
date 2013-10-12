@@ -39,6 +39,11 @@ class Response
         return $this;
     }
 
+    public function getFormat()
+    {
+        return $this->_format;
+    }
+
     public function writeContent()
     {
         echo $this->_content;

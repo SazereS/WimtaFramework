@@ -5,34 +5,7 @@ namespace Library;
 class Router
 {
 
-    private $_routes = array(
-        '{controller}/{id; type: integer}'          => array(
-            'controller' => '{controller}s',
-            'action'     => 'view',
-            'id'         => '{id}'
-        ),
-        '{controller}/{id; type: integer}/{action}' => array(
-            'controller' => '{controller}s',
-            'action'     => '{action}',
-            'id'         => '{id}'
-        ),
-        '{controller}/{action}/*'                   => array(
-            'controller' => '{controller}',
-            'action'     => '{action}'
-        ),
-        '{controller}/{action}'                     => array(
-            'controller' => '{controller}',
-            'action'     => '{action}'
-        ),
-        '{controller}'                              => array(
-            'controller' => '{controller}',
-            'action'     => 'index'
-        ),
-        ''                                          => array(
-            'controller' => 'index',
-            'action'     => 'index'
-        ),
-    );
+    private $_routes = array();
 
     /**
      * @var Request
@@ -46,6 +19,9 @@ class Router
 
     public function findRoute()
     {
+        if(Settings::getInstance()->router_disable_default_routes != true){
+            $this->addDefaultRoutes();
+        }
         if ($this->_request->url === '') {
             $this->_request->params = $this->_routes[''];
             return $this;
@@ -62,7 +38,8 @@ class Router
                     (end($route) == '*') AND ($route_length <= $url_length + 1)
                 )
             ) {
-                $flag = true;
+                $flag    = true;
+                $anchors = array();
                 foreach ($route as $key => $lonely_param) { // Forever alone :'(
                     if ($lonely_param[0] == '{' AND $lonely_param[strlen($lonely_param) - 1] == '}') {
                         $lonely_param = explode(';', trim($lonely_param, '{};'));
@@ -141,12 +118,61 @@ class Router
                         $this->_request->params,
                         $route_params
                     );
+                    Registry::getInstance()->log->write('Using route "' . $route_string . '"');
                     return $this;
                 } else {
                     //break;
                 }
             }
         }
+        return $this;
+    }
+
+    public function addRoute($route, array $params)
+    {
+        $this->_routes[(string) $route] = $params;
+        return $this;
+    }
+
+    public function setRoutes(array $routes)
+    {
+        $this->_routes = $routes;
+        return $this;
+    }
+
+    public function addDefaultRoutes()
+    {
+        $this->_routes = array_merge(
+            $this->_routes,
+            array(
+                '{controller}/{id; type: integer}'          => array(
+                    'controller' => '{controller}s',
+                    'action'     => 'view',
+                    'id'         => '{id}'
+                ),
+                '{controller}/{id; type: integer}/{action}' => array(
+                    'controller' => '{controller}s',
+                    'action'     => '{action}',
+                    'id'         => '{id}'
+                ),
+                '{controller}/{action}/*'                   => array(
+                    'controller' => '{controller}',
+                    'action'     => '{action}'
+                ),
+                '{controller}/{action}'                     => array(
+                    'controller' => '{controller}',
+                    'action'     => '{action}'
+                ),
+                '{controller}'                              => array(
+                    'controller' => '{controller}',
+                    'action'     => 'index'
+                ),
+                ''                                          => array(
+                    'controller' => 'index',
+                    'action'     => 'index'
+                )
+            )
+        );
         return $this;
     }
 
