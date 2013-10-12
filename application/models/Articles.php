@@ -1,9 +1,19 @@
 <?php
 
-class Application_Models_Articles extends Library_Db_Table{
+namespace Application\Models;
 
-    public function __construct() {
+class Articles extends \Library\Db\Table
+{
+
+    public function __construct()
+    {
         $this->_table = 'articles';
+        $this->_has_many = array(
+            'comments' => array(
+                'public_key' => 'article_id',
+                'as'         => 'comments'
+            )
+        );
     }
 
 }

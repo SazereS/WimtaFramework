@@ -1,5 +1,8 @@
 <?php
 
-class Library_Db{
-    
+namespace Library;
+
+class Db
+{
+
 }
