@@ -17,4 +17,19 @@ class GuidesController extends \Library\Controller
         // Default action code
     }
 
+    public function quickStartAction()
+    {
+        // Put your code here
+    }
+
+    public function structureAction()
+    {
+        // Put your code here
+    }
+
+    public function apiAction()
+    {
+        // Put your code here
+    }
+
 }

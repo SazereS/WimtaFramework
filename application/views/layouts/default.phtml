@@ -21,18 +21,22 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">Wimta Framework</a>
+                    <a class="navbar-brand" href="<?= $this->baseUrl('') ?>">Wimta Framework</a>
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="<?=$this->baseUrl('') ?>">Главная</a></li>
-                        <li><a href="#">Быстрый старт</a></li>
-                        <li><a href="#">Структура</a></li>
+                        <li class=""><a href="<?=$this->baseUrl('') ?>">Главная</a></li>
+                        <li><a href="<?= $this->baseUrl('quick-start') ?>">Быстрый старт</a></li>
+                        <li><a href="<?= $this->baseUrl('structure') ?>">Структура</a></li>
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">API <b class="caret"></b></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                API
+                                <b class="caret"></b>
+                            </a>
                             <ul class="dropdown-menu">
-                                <li><a href="#">Library</a></li>
-                                <li><a href="#">Helpers</a></li>
+                                <li><a href="<?= $this->baseUrl('api') ?>#helpers">Конфигурация</a></li>
+                                <li><a href="<?= $this->baseUrl('api') ?>#helpers">Хелперы</a></li>
+                                <li><a href="<?= $this->baseUrl('api') ?>#library">Библиотека</a></li>
                             </ul>
                         </li>
                         <li><a href="<?=$this->baseUrl('articles') ?>">Блог</a></li>
