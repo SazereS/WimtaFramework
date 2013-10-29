@@ -22,4 +22,9 @@ class ErrorsController extends \Library\Controller
         // Put your code here
     }
 
+    public function page403Action()
+    {
+        // Put your code here
+    }
+
 }

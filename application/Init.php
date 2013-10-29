@@ -5,9 +5,23 @@ namespace Application;
 class Init extends \Library\Init
 {
 
-    public function _initTest()
+    public function _initAcl()
     {
-        \Library\Db\Adapter::getInstance();
+        $acl = new \Library\Module\Acl();
+
+        $acl->addGroup('guest');
+        $acl->deny('guest');
+        $acl->allow('guest', 'index');
+        $acl->allow('guest', 'errors');
+
+        $acl->addGroup('user');
+        $acl->allow('user');
+        $acl->deny('user', 'admin');
+
+        $acl->setGroup('user');
+        if(!$acl->isAllowed()){
+            $this->redirect('errors/page403');
+        }
     }
 
     public function preInit()

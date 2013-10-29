@@ -111,7 +111,7 @@ class Application
         $init->postInit();
         $log->writeSuccess('Application successfully executed for ' . $this->getElapsedTime() . ' seconds!');
         if(
-            (Settings::getInstance()->debug_log_show == true)
+            (Settings::getInstance()->debug_log_enable == true)
             AND ($this->_response->getFormat() == Response::FORMAT_HTML)
         ){
             $log->show();
@@ -195,6 +195,9 @@ class Application
         if (method_exists($this->_controller, $action_name)) {
             return $this->_controller->$action_name();
         } else {
+            if (Settings::getInstance()->error_page404) {
+                \Helpers\Page404::page404();
+            }
             throw new Controller\Exception(
                 'Controller "'
                 . $this->_request->getController()
