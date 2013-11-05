@@ -63,7 +63,7 @@ class Row implements \IteratorAggregate
         } elseif(isset($this->_has_many[$name])){
             if(!$this->_joined['has_many'][$name]){
                 $class = '\\Application\\Models\\'
-                    . \Helpers\GetRealName::getRealName($this->_has_many[$name]);
+                    . \Library\Base::getRealName($this->_has_many[$name]);
                 $model = new $class();
                 $has_many = $this->_table->getJoined();
                 $this->_joined['has_many'][$name] = $model->fetchAll(

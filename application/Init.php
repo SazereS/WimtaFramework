@@ -28,6 +28,7 @@ class Init extends \Library\Init
         $acl->deny('guest');
         $acl->allow('guest', 'index');
         $acl->allow('guest', 'errors');
+        $acl->allow('guest', 'auth');
 
         $acl->addGroup('user');
         $acl->allow('user');

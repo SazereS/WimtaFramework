@@ -71,7 +71,7 @@ class Response
         if ($this->_format == self::FORMAT_JSON) {
             $this->setContent(
                 json_encode(
-                    \Helpers\ObjectsToArray::objectsToArray($view->getOut()),
+                    \Library\Base::objectsToArray($view->getOut()),
                                                             (Settings::getInstance()->getMode() == 'development')
                             ? JSON_PRETTY_PRINT : 0
                 )
@@ -79,8 +79,8 @@ class Response
             header('Content-Type: application/json');
         } elseif ($this->_format == self::FORMAT_XML) {
             $this->setContent(
-                \Helpers\XmlEncode::xmlEncode(
-                    \Helpers\ObjectsToArray::objectsToArray($view->getOut()),
+                \Library\Base::xmlEncode(
+                    \Library\Base::objectsToArray($view->getOut()),
                     false
                 )
             );

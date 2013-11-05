@@ -26,13 +26,23 @@ class Acl extends \Library\Module
         return $this;
     }
 
+
+    /**
+     * @todo Исправить наследование
+     */
     public function allow($group, $controller = null, array $actions = null)
     {
+        if(!is_null($controller)){
+            $controller = (string) $controller;
+        }
         if(isset($this->_groups[$group])){
             if ($controller AND $actions) {
-                $this->_groups[$group]['allow'][(string) $controller] = $actions;
+                if(is_array($this->_groups[$group]['allow'][$controller])){
+                    $actions = array_merge($this->_groups[$group]['allow'][$controller], $actions);
+                }
+                $this->_groups[$group]['allow'][$controller] = $actions;
             } elseif ($controller) {
-                $this->_groups[$group]['allow'][(string) $controller] = true;
+                $this->_groups[$group]['allow'][$controller] = true;
             } else {
                 $this->_groups[$group]['mode'] = true;
             }
@@ -44,11 +54,17 @@ class Acl extends \Library\Module
 
     public function deny($group, $controller = null, $actions = null)
     {
+        if (!is_null($controller)) {
+            $controller = (string) $controller;
+        }
         if (isset($this->_groups[$group])) {
             if ($controller AND $actions) {
-                $this->_groups[$group]['deny'][(string) $controller] = $actions;
+                if (is_array($this->_groups[$group]['deny'][$controller])) {
+                    $actions = array_merge($this->_groups[$group]['deny'][$controller], $actions);
+                }
+                $this->_groups[$group]['deny'][$controller] = $actions;
             } elseif ($controller) {
-                $this->_groups[$group]['deny'][(string) $controller] = true;
+                $this->_groups[$group]['deny'][$controller] = true;
             } else {
                 $this->_groups[$group]['mode'] = false;
             }

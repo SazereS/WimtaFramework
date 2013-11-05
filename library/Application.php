@@ -178,7 +178,7 @@ class Application
             $this->_controller->view = $view;
         } catch (Autoloader\Exception $e) {
             if(Settings::getInstance()->error_page404){
-                \Helpers\Page404::page404();
+                Base::page404();
             }
             throw new Application\Exception(
                 'Cannot find controller class "'
@@ -202,7 +202,7 @@ class Application
             return $this->_controller->$action_name();
         } else {
             if (Settings::getInstance()->error_page404) {
-                \Helpers\Page404::page404();
+                Base::page404();
             }
             throw new Controller\Exception(
                 'Controller "'

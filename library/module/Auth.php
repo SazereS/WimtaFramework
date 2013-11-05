@@ -141,8 +141,8 @@ class Auth extends \Library\Module{
                     } else {
                         $expire = 0;
                     }
-                    setcookie('id', $id, $expire);
-                    setcookie('password', $password, $expire);
+                    setcookie('id', $id, $expire, '/');
+                    setcookie('password', $password, $expire, '/');
                 }
                 return true;
             }
@@ -162,8 +162,8 @@ class Auth extends \Library\Module{
     public function signOut()
     {
         $_SESSION['auth'] = false;
-        setcookie('login', false);
-        setcookie('password', false);
+        setcookie('login', '', time() - 1, '/');
+        setcookie('password', '', time() - 1, '/');
         return $this;
     }
 
