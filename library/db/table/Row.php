@@ -93,6 +93,10 @@ class Row implements \IteratorAggregate
         return $this->_id;
     }
 
+    /**
+     *
+     * @return array
+     */
     public function toArray()
     {
         return (array) array_merge(

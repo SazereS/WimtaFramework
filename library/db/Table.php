@@ -21,6 +21,11 @@ class Table
         //$this->_table = $table;
     }
 
+    public function __toString()
+    {
+        return $this->getTableName();
+    }
+
     public function getTableName()
     {
         return $this->_table;
@@ -40,6 +45,10 @@ class Table
         }
     }
 
+    /**
+     *
+     * @return array of \Library\Db\Table\Row
+     */
     public function fetchAll($where = NULL, $order = NULL, $limit = NULL)
     {
         $temp = Adapter::getInstance()
@@ -51,6 +60,10 @@ class Table
         return $rows;
     }
 
+    /**
+     *
+     * @return \Library\Db\Table\Row
+     */
     public function fetchRow($where = NULL, $order = NULL)
     {
         $temp           = Adapter::getInstance()->fetchRow($where, $order);
@@ -63,6 +76,10 @@ class Table
         return Adapter::getInstance()->getKeyField($this->getTableName());
     }
 
+    /**
+     *
+     * @return \Library\Db\Table\Row
+     */
     public function find($id)
     {
         $temp = Adapter::getInstance()->find($this->getTableName(), $id);
@@ -74,11 +91,19 @@ class Table
         }
     }
 
+    /**
+     *
+     * @return integer
+     */
     public function rowCount($where = NULL, $sort = NULL, $limit = NULL)
     {
         return Adapter::getInstance()->rowCount($where, $sort, $limit);
     }
 
+    /**
+     *
+     * @return \Library\Db\Table\Row
+     */
     public function insertRow($values = array(), $return_inserted = true)
     {
         $res = Adapter::getInstance()
@@ -106,6 +131,10 @@ class Table
         return $this->_current = new Table\Row($this);
     }
 
+    /**
+     *
+     * @return integer
+     */
     public function updateRow($where = NULL, $values = array())
     {
         $temp = Adapter::getInstance()->updateRow($this->getTableName(), $where, $values);

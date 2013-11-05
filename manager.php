@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 define('APPLICATION_PATH', './application/');
 
 global $templates;
