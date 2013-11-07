@@ -88,19 +88,6 @@ class Auth extends \Library\Module{
             'id'       => $id,
             'password' => $password
         );
-        /*
-        if($this->_storage == self::STORAGE_SESSION){
-            $_SESSION['auth']['id']       = $id;
-            $_SESSION['auth']['password'] = $password;
-        } else {
-            if($this->_remember_me){
-                $expire = time() + $this->_remember_time;
-            } else {
-                $expire = 0;
-            }
-            setcookie('id', $id, $expire);
-            setcookie('password', $password, $expire);
-        }*/
         return $this;
     }
 
@@ -141,8 +128,8 @@ class Auth extends \Library\Module{
                     } else {
                         $expire = 0;
                     }
-                    setcookie('id', $id, $expire, '/');
-                    setcookie('password', $password, $expire, '/');
+                    setcookie('id', $id, $expire, \Library\Base::baseUrl());
+                    setcookie('password', $password, $expire,                              \Library\Base::baseUrl());
                 }
                 return true;
             }
@@ -162,8 +149,8 @@ class Auth extends \Library\Module{
     public function signOut()
     {
         $_SESSION['auth'] = false;
-        setcookie('login', '', time() - 1, '/');
-        setcookie('password', '', time() - 1, '/');
+        setcookie('login', '', time() - 1, \Library\Base::baseUrl());
+        setcookie('password', '', time() - 1, \Library\Base::baseUrl());
         return $this;
     }
 

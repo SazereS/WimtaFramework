@@ -29,13 +29,22 @@ class Module
         return self::$_modules[strtolower($name)];
     }
 
+    final public function load($module)
+    {
+        $name = '\\Library\\Module\\' . (string) $module;
+        try {
+            new $name();
+        } catch (Exception $e){
+            throw new Module\Exception($e->getMessage());
+        }
+    }
+
     final public function autoload()
     {
         $modules = Settings::getInstance()->modules_autoload;
         if(is_array($modules)){
             foreach ($modules as $module){
-                $name = '\\Library\\Module\\' . $module;
-                new $name();
+                $this->load($module);
             }
         }
         return $this;

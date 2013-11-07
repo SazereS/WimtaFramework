@@ -230,7 +230,7 @@ class Application
     {
         Base::registerHelper(
             'baseUrl',
-            function($url)
+            function($url = '')
             {
                 $dir = trim(dirname($_SERVER['PHP_SELF']), '\\');
                 return '/' . trim($dir . '/' . trim($url, '/'), '/');
