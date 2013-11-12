@@ -34,7 +34,7 @@ class Module
         $name = '\\Library\\Module\\' . (string) $module;
         try {
             new $name();
-        } catch (Exception $e){
+        } catch (\Exception $e){
             throw new Module\Exception($e->getMessage());
         }
     }

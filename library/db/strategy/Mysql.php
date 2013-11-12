@@ -69,9 +69,41 @@ class Mysql extends Prototype
     /**
      * @todo Добавить функционал изменения структуры таблицы
      */
-    public function updateTable()
+    public function updateTable($table_name, array $fields)
     {
-
+        $query = 'ALTER TABLE `' . (string) $table_name . '` ';
+        $add    = @$fields['add'];
+        $drop   = @$fields['drop'];
+        $change = @$fields['change'];
+        $columns = array();
+        if($add){
+            foreach($add as $col => $params){
+                $columns[] = 'ADD COLUMN `' . $col . '` ' . $params;
+            }
+        }
+        if($drop){
+            foreach($drop as $col){
+                $columns[] = 'DROP COLUMN `' . $col . '`';
+            }
+        }
+        if($change){
+            foreach($change as $col => $params){
+                if(!is_array($params)){
+                    $columns[] = 'ADD COLUMN `' . $col . '` `' . $col . '` ' . $params;
+                } else {
+                    $new_name = reset($params);
+                    $params = next($params);
+                    $columns[] = 'ADD COLUMN `' . $col . '` `' . $new_name . '` ' . $params;
+                }
+            }
+        }
+        $query .= implode(', ', $columns);
+        $query .= ';';
+        try{
+            \Library\Db\Adapter::getInstance()->exec($query);
+        } catch (PDOException $e) {
+            throw new \Library\Db\Exception('MIGRATION EXCEPTION! ' . $e->getMessage());
+        }
     }
 
     public function dropTable($table_name)

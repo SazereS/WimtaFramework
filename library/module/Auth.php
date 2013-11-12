@@ -117,7 +117,13 @@ class Auth extends \Library\Module{
                 $password = $this->getHash($password, $array[$this->_salt_col]);
             }
             if($array[$this->_password_col] == $password){
-                $this->_user_row = $array;
+                try{
+                    $model = '\\Application\\Models\\' . $this->_table;
+                    $model = new $model();
+                    $this->_user_row = new \Library\Db\Table\Row($model, $array);
+                } catch (\Exception $e){
+                    $this->_user_row = $array;
+                }
                 \Library\Registry::getInstance()->log->writeSuccess('Logged in as "' . $id . '"');
                 if ($this->_storage == self::STORAGE_SESSION) {
                     $_SESSION['auth']['id']       = $id;
@@ -131,6 +137,7 @@ class Auth extends \Library\Module{
                     setcookie('id', $id, $expire, \Library\Base::baseUrl());
                     setcookie('password', $password, $expire,                              \Library\Base::baseUrl());
                 }
+                $this->registerHelpers();
                 return true;
             }
         }
@@ -149,14 +156,42 @@ class Auth extends \Library\Module{
     public function signOut()
     {
         $_SESSION['auth'] = false;
-        setcookie('login', '', time() - 1, \Library\Base::baseUrl());
-        setcookie('password', '', time() - 1, \Library\Base::baseUrl());
+        setcookie('login', '', time() - 3600, \Library\Base::baseUrl());
+        setcookie('password', '', time() - 3600, \Library\Base::baseUrl());
         return $this;
     }
 
-    public function getUser()
+    /**
+     * Returns user's row
+     * @param string $key
+     * @return \Library\Db\Table\Row Can also return array if model for this table not exists
+     */
+    public function getUser($key = null)
     {
+        if(!is_null($key)){
+            if(is_array($this->_user_row)){
+                return $this->_user_row[$key];
+            } elseif(is_object($this->_user_row)) {
+                return $this->_user_row->{$key};
+            }
+        }
         return $this->_user_row;
+    }
+
+    private function registerHelpers(){
+        \Library\Base::registerHelper(
+            'checkAuth',
+            function(){
+                return $this->check();
+            }
+        );
+        \Library\Base::registerHelper(
+            'getAuth',
+            function($key = null){
+                return $this->getUser($key);
+            }
+        );
+        return $this;
     }
 
 }

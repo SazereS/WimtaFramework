@@ -113,7 +113,7 @@ class Table
                 . '` WHERE `Field` = \'created_at\''
             );
         if ($res->rowCount() == 1 AND !isset($values['created_at'])) {
-            $values['created_at'] = date('Y-m-d h:i:s');
+            $values['created_at'] = date('Y-m-d H:i:s');
         }
         $id = Adapter::getInstance()->insertRow($this->getTableName(), $values);
         if ($return_inserted) {

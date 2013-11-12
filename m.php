@@ -217,7 +217,7 @@ function migrate()
             $class      = new $class_name();
             try {
                 $class->apply();
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 throw new \Library\Db\Exception($e->getMessage());
             }
             $version = $class->version;
@@ -342,7 +342,7 @@ switch (strtolower(@$argv[1])) {
         echo 'WIMTA Generating tools' . PHP_EOL . PHP_EOL;
         echo '    create' . PHP_EOL;
         echo '        controller  <controller-name>' . PHP_EOL;
-        echo '        action     <controller-name> <action-name>' . PHP_EOL;
+        echo '        action      <controller-name> <action-name>' . PHP_EOL;
         echo '        *view       <custom-view-name>' . PHP_EOL;
         echo '        *layout     <layout-name>' . PHP_EOL;
         echo PHP_EOL;

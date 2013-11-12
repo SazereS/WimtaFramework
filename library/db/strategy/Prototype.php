@@ -124,29 +124,4 @@ class Prototype extends \PDO
         return $this->exec('DELETE FROM `' . $table . '`' . $where);
     }
 
-    public function createTable(
-        $table_name,
-        array $fields,
-        $use_default_fields      = true,
-        $primary                 = 'id',
-        array $additional_params = array()
-    )
-    {
-        # Just interface-like method (need to be overloaded by strategy's methods)
-    }
-
-    public function updateTable()
-    {
-        # Just interface-like method (need to be overloaded by strategy's methods)
-    }
-
-    public function dropTable($table_name)
-    {
-        try {
-            \Library\Db\Adapter::getInstance()->exec('DROP TABLE `' . $table_name . '`');
-        } catch (PDOException $e) {
-            throw new \Library\Db\Exception($e->getMessage());
-        }
-    }
-
 }

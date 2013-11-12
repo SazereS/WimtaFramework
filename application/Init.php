@@ -37,11 +37,16 @@ class Init extends \Library\Init
         $acl->addGroup('admin');
         $acl->allow('admin');
 
-        $user = $this->getModule('auth')->getUser();
-        $acl->setGroup(($user) ? $user['group'] : 'guest');
+        $user = $this->getAuth('group');
+        $acl->setGroup(($user) ? $user : 'guest');
         if(!$acl->isAllowed()){
             $this->redirect('errors/page403');
         }
+    }
+
+    public function _initTest2()
+    {
+        $this->writeLog($this->getAuth());
     }
 
     public function preInit()
