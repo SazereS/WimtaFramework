@@ -35,7 +35,7 @@ class Row implements \IteratorAggregate
                     . '` WHERE `Field` = \'created_at\''
                 );
             if ($res->rowCount() == 1) {
-                $this->_cells['created_at'] = date('Y-m-d h:i:s');
+                $this->_cells['created_at'] = date('Y-m-d H:i:s');
             }
         } else {
             unset($cells[$this->getKeyField()]);
@@ -43,6 +43,9 @@ class Row implements \IteratorAggregate
         }
         foreach ($this->_table->getJoined() as $table => $has_many) {
             $this->_has_many[($has_many['as']) ? $has_many['as'] : $table] = $table;
+        }
+        foreach ($this->_table->getJoined('belongs_to') as $table => $belongs_to) {
+            $this->_belongs_to[($belongs_to['as']) ? $belongs_to['as'] : $table] = $table;
         }
 
     }
@@ -74,6 +77,20 @@ class Row implements \IteratorAggregate
                 );
                 return $this->_joined['has_many'][$name];
             }
+        } elseif(isset($this->_belongs_to[$name])) {
+            if(!isset($this->_table->joined_data[$name])){
+                $this->_table->joined_data[$name] = array();
+            }
+            $belongs_to = $this->_table->getJoined('belongs_to');
+            $public_key = $belongs_to[$this->_belongs_to[$name]]['public_key'];
+            if ($row = $this->_table->joined_data[$name][$this->_cells[$public_key]]) {
+                return $row;
+            }
+            $class = '\\Application\\Models\\'
+                . \Library\Base::getRealName($this->_belongs_to[$name]);
+            $model = new $class();
+            $row = $model->find($this->_cells[$public_key]);
+            return $this->_table->joined_data[$name][$this->_cells[$public_key]] = $row;
         }
         return $this->_cells[$name];
     }
@@ -99,7 +116,7 @@ class Row implements \IteratorAggregate
      */
     public function toArray()
     {
-        return (array) array_merge(
+        return array_merge(
             $this->_cells,
             ($this->_id)
             ? array($this->getKeyField() => $this->getKey())

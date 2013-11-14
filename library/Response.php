@@ -69,18 +69,20 @@ class Response
     public function renderLayout(View $view)
     {
         if ($this->_format == self::FORMAT_JSON) {
+            $out = $view->getOut();
             $this->setContent(
                 json_encode(
-                    \Library\Base::objectsToArray($view->getOut()),
+                    \Library\Base::objectsToArray($out['content']),
                                                             (Settings::getInstance()->getMode() == 'development')
                             ? JSON_PRETTY_PRINT : 0
                 )
             );
             header('Content-Type: application/json');
         } elseif ($this->_format == self::FORMAT_XML) {
+            $out = $view->getOut();
             $this->setContent(
                 \Library\Base::xmlEncode(
-                    \Library\Base::objectsToArray($view->getOut()),
+                    \Library\Base::objectsToArray($out['content']),
                     false
                 )
             );

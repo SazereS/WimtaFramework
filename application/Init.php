@@ -46,7 +46,7 @@ class Init extends \Library\Init
 
     public function _initTest2()
     {
-        $this->writeLog($this->getAuth());
+
     }
 
     public function preInit()

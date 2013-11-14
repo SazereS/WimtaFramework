@@ -16,7 +16,17 @@ class ArticlesController extends \Library\Controller
     {
         $articles             = new Articles();
         $this->view->articles = $articles->fetchAll();
-        // $this->getResponse()->setFormat(\Library\Response::FORMAT_XML);
+        if($format = $this->getParam('format')){
+            foreach ($this->view->articles as $article){
+                $content['articles'][] = $article->toArray();
+            }
+            $this->view->content = $content;
+            if(strtolower($format) == 'xml'){
+                $this->getResponse()->setFormat(\Library\Response::FORMAT_XML);
+            } else {
+                $this->getResponse()->setFormat(\Library\Response::FORMAT_JSON);
+            }
+        }
     }
 
     public function newAction()

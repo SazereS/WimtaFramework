@@ -300,9 +300,9 @@ class Application
         );
         Base::registerHelper(
             'writeLog',
-            function($message = null)
+            function($message = false)
             {
-                if (is_null($message)) {
+                if ($message === false) {
                     return \Library\Registry::getInstance()->log;
                 } else {
                     \Library\Registry::getInstance()->log->write($message);
@@ -332,6 +332,7 @@ class Application
                             $res .= str_repeat('  ', $level);
                             $res .= '<' . $tag . $params . '>' . "\n";
                             $res .= Base::xmlEncode($v, false, $level + 1);
+                            $res .= str_repeat('  ', $level);
                             $res .= '</' . $tag . '>' . "\n";
                         } else {
                             $res .= str_repeat('  ', $level);

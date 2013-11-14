@@ -12,9 +12,10 @@ class Table
      * @var \Library\Db\Table\Row
      */
     protected $_current = NULL;
+    protected $_belongs_to      = array();
+    protected $_has_many        = array();
 
-    protected $_belongs_to = array();
-    protected $_has_many   = array();
+    public $joined_data = array();
 
     public function __construct()
     {
