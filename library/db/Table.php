@@ -147,4 +147,40 @@ class Table
         return Adapter::getInstance()->deleteRows($this->getTableName(), $where);
     }
 
+    /**
+     *
+     * @param string $table
+     * @param string $public_key
+     * @param string $as
+     * @return \Library\Db\Table
+     */
+    public function belongsTo($table, $public_key, $as = false)
+    {
+        $this->_belongs_to[$table] = array(
+            'public_key' => (string) $public_key
+        );
+        if($as){
+            $this->_belongs_to[$table]['as'] = (string) $as;
+        }
+        return $this;
+    }
+
+    /**
+     *
+     * @param string $table
+     * @param string $public_key
+     * @param string $as
+     * @return \Library\Db\Table
+     */
+    public function hasMany($table, $public_key, $as = false)
+    {
+        $this->_has_many[$table] = array(
+            'public_key' => (string) $public_key
+        );
+        if ($as) {
+            $this->_has_many[$table]['as'] = (string) $as;
+        }
+        return $this;
+    }
+
 }

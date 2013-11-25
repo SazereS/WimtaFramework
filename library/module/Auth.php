@@ -18,6 +18,12 @@ class Auth extends \Library\Module{
     private $_user_row = null;
     private $_data = false;
 
+    public function __construct()
+    {
+        parent::__construct();
+        $this->registerHelpers();
+    }
+
     public function setTable($table)
     {
         $this->_table = strval($table);
@@ -137,7 +143,6 @@ class Auth extends \Library\Module{
                     setcookie('id', $id, $expire, \Library\Base::baseUrl());
                     setcookie('password', $password, $expire,                              \Library\Base::baseUrl());
                 }
-                $this->registerHelpers();
                 return true;
             }
         }

@@ -111,7 +111,7 @@ class Validator extends \Library\Module
             $table,
             '`' . $field . '` = ' . $adapter->quote($data)
         );
-        return ($row->columnCount() > 0);
+        return ($row->rowCount() > 0);
     }
 
     public function validateRecordNotExists($data, $table, $field)
@@ -121,7 +121,7 @@ class Validator extends \Library\Module
             $table,
             '`' . $field . '` = ' . $adapter->quote($data)
         );
-        return !($row->columnCount() > 0);
+        return !($row->rowCount() > 0);
     }
 
     public function validateIdentical($data, $second)

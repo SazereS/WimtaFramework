@@ -61,6 +61,11 @@ class Response
         return $this->_content;
     }
 
+    public function setLayout($layout_name)
+    {
+        Settings::getInstance()->default_layout = (string) $layout_name;
+    }
+
     public function getLayout()
     {
         return $this->_layout;

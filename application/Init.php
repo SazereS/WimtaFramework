@@ -24,18 +24,18 @@ class Init extends \Library\Init
     {
         $acl = $this->getModule('acl');
 
-        $acl->addGroup('guest');
-        $acl->deny('guest');
-        $acl->allow('guest', 'index');
-        $acl->allow('guest', 'errors');
-        $acl->allow('guest', 'auth');
+        $acl->addGroup('guest')
+            ->deny()
+            ->allow('index')
+            ->allow('errors')
+            ->allow('auth');
 
-        $acl->addGroup('user');
-        $acl->allow('user');
-        $acl->deny('user', 'admin');
+        $acl->addGroup('user')
+            ->allow()
+            ->deny('admin');
 
-        $acl->addGroup('admin');
-        $acl->allow('admin');
+        $acl->addGroup('admin')
+            ->allow();
 
         $user = $this->getAuth('group');
         $acl->setGroup(($user) ? $user : 'guest');

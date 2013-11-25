@@ -6,46 +6,35 @@ class Acl extends \Library\Module
 {
 
     private $_groups = array();
+
+    /**
+     * Acl\Group
+     */
     private $_group = null;
 
+    /**
+     *
+     * @param string $group
+     * @param string $parent
+     * @return Acl\Group
+     */
     public function addGroup($group, $parent = null)
     {
-        if(isset($this->_groups[$parent])){
-            $this->_groups[strval($group)] = $this->_groups[$parent];
-            $this->_groups[strval($group)]['parent'] = $parent;
-        } elseif(is_null($parent)) {
-            $this->_groups[strval($group)] = array(
-                'parent' => $parent,
-                'allow'  => array(),
-                'deny'   => array(),
-                'mode'   => false
-            );
+        if(is_null($parent)) {
+            $this->_groups[$group] = new Acl\Group($group);
+        } elseif(isset($this->_groups[(string) $parent])){
+            $this->_groups[$group] = clone $this->_groups[(string) $parent];
+            $this->_groups[$group]->setName($group);
         } else {
             \Library\Registry::getInstance()->log->writeWarning('Unknown group "' . $parent . '"! Cannot clone it!');
         }
-        return $this;
+        return $this->_groups[$group];
     }
 
-
-    /**
-     * @todo Исправить наследование
-     */
     public function allow($group, $controller = null, array $actions = null)
     {
-        if(!is_null($controller)){
-            $controller = (string) $controller;
-        }
         if(isset($this->_groups[$group])){
-            if ($controller AND $actions) {
-                if(is_array($this->_groups[$group]['allow'][$controller])){
-                    $actions = array_merge($this->_groups[$group]['allow'][$controller], $actions);
-                }
-                $this->_groups[$group]['allow'][$controller] = $actions;
-            } elseif ($controller) {
-                $this->_groups[$group]['allow'][$controller] = true;
-            } else {
-                $this->_groups[$group]['mode'] = true;
-            }
+            $this->_groups[$group]->allow($controller, $actions);
         } else {
             \Library\Registry::getInstance()->log->writeWarning('Unknown group "' . $group . '"! Cannot add rule!');
         }
@@ -54,20 +43,8 @@ class Acl extends \Library\Module
 
     public function deny($group, $controller = null, $actions = null)
     {
-        if (!is_null($controller)) {
-            $controller = (string) $controller;
-        }
         if (isset($this->_groups[$group])) {
-            if ($controller AND $actions) {
-                if (is_array($this->_groups[$group]['deny'][$controller])) {
-                    $actions = array_merge($this->_groups[$group]['deny'][$controller], $actions);
-                }
-                $this->_groups[$group]['deny'][$controller] = $actions;
-            } elseif ($controller) {
-                $this->_groups[$group]['deny'][$controller] = true;
-            } else {
-                $this->_groups[$group]['mode'] = false;
-            }
+            $this->_groups[$group]->deny($controller, $actions);
         } else {
             \Library\Registry::getInstance()->log->writeWarning('Unknown group "' . $group . '"! Cannot add rule!');
         }
@@ -76,10 +53,13 @@ class Acl extends \Library\Module
 
     public function setGroup($group)
     {
-        $this->_group = (string) $group;
+        $this->_group = $this->_groups[$group];
         return $this;
     }
 
+    /**
+     * @return Acl\Group
+     */
     public function getGroup()
     {
         return $this->_group;
@@ -91,51 +71,7 @@ class Acl extends \Library\Module
             \Library\Registry::getInstance()->log->writeError('Unknown group! Access disallowed!');
             return false;
         }
-        $rules = $this->_groups[$this->getGroup()];
-        $request = \Library\Registry::getInstance()->request;
-        $controller = $request->getController();
-        $action     = $request->getAction();
-        if($rules['mode']){
-            $flag = true;
-            if($rules['deny'][$controller]){
-                if(is_array($rules['deny'][$controller])){
-                    if(in_array($action, $rules['deny'][$controller])){
-                        $flag = false;
-                    }
-                } else {
-                    if (is_array($rules['allow'][$controller])) {
-                        if(!in_array($action, $rules['allow'][$controller])){
-                            $flag = false;
-                        }
-                    } else {
-                        $flag = false;
-                    }
-                }
-            }
-        } else {
-            $flag = false;
-            if ($rules['allow'][$controller]) {
-                if (is_array($rules['allow'][$controller])) {
-                    if (in_array($action, $rules['allow'][$controller])) {
-                        $flag = true;
-                    }
-                } else {
-                    if (is_array($rules['deny'][$controller])) {
-                        if (!in_array($action, $rules['deny'][$controller])) {
-                            $flag = true;
-                        }
-                    } else {
-                        $flag = true;
-                    }
-                }
-            }
-        }
-        if($flag){
-            \Library\Registry::getInstance()->log->writeSuccess('Access allowed!');
-        } else {
-            \Library\Registry::getInstance()->log->writeError('Access disallowed!');
-        }
-        return $flag;
+        return $this->getGroup()->isAllowed();
     }
 
 }
