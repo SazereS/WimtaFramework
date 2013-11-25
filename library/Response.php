@@ -61,6 +61,11 @@ class Response
         return $this->_content;
     }
 
+    public function setLayout($layout_name)
+    {
+        Settings::getInstance()->default_layout = (string) $layout_name;
+    }
+
     public function getLayout()
     {
         return $this->_layout;
@@ -69,18 +74,20 @@ class Response
     public function renderLayout(View $view)
     {
         if ($this->_format == self::FORMAT_JSON) {
+            $out = $view->getOut();
             $this->setContent(
                 json_encode(
-                    \Helpers\ObjectsToArray::objectsToArray($view->getOut()),
+                    \Library\Base::objectsToArray($out['content']),
                                                             (Settings::getInstance()->getMode() == 'development')
                             ? JSON_PRETTY_PRINT : 0
                 )
             );
             header('Content-Type: application/json');
         } elseif ($this->_format == self::FORMAT_XML) {
+            $out = $view->getOut();
             $this->setContent(
-                \Helpers\XmlEncode::xmlEncode(
-                    \Helpers\ObjectsToArray::objectsToArray($view->getOut()),
+                \Library\Base::xmlEncode(
+                    \Library\Base::objectsToArray($out['content']),
                     false
                 )
             );
