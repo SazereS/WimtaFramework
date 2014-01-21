@@ -2,7 +2,7 @@
 
 namespace Library\Db\Strategy;
 
-class Mysql extends Prototype
+class Mysql extends \Library\Db\Strategy
 {
 
     public function __construct(

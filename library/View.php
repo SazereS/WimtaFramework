@@ -35,13 +35,16 @@ class View extends Base
 
     public function render($file, $out = array())
     {
-        $path = $this->_path . DIRECTORY_SEPARATOR . $file . '.phtml';
-        if (!file_exists($path)) {
+        $path     = $this->_path . DIRECTORY_SEPARATOR . $file . '.phtml';
+        $response = $this->getRegistry()->response;
+        if (!file_exists($path) AND ($response->getFormat() == $response::FORMAT_HTML)) {
             throw new View\Exception('Cannot find view file: "' . $path . '"');
         }
         extract(array_merge($out, $this->_out), EXTR_OVERWRITE);
         ob_start();
-        require($path);
+        if ($response->getFormat() == $response::FORMAT_HTML) {
+            require($path);
+        }
         $this->rendered = ob_get_contents();
         ob_end_clean();
         return $this;

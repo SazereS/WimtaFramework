@@ -9,12 +9,12 @@ class Adapter extends \Library\Singleton
 
     /**
      *
-     * @var \Library\Db\Strategy\Prototype
+     * @var \Library\Db\Strategy
      */
     private $_connection = null;
 
     /**
-     * @return Strategy\Prototype;
+     * @return Strategy;
      */
     public static function getInstance()
     {
@@ -37,7 +37,7 @@ class Adapter extends \Library\Singleton
         return $this;
     }
 
-    public function setStrategy(Strategy\Prototype $strategy)
+    public function setStrategy(Strategy $strategy)
     {
         $this->_connection = $strategy;
         $this->_connection->setAttribute(

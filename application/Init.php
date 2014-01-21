@@ -5,9 +5,13 @@ namespace Application;
 class Init extends \Library\Init
 {
 
-    public function _initTest()
+    public function _initTranslate()
     {
 
+        $this->getModule('translator')
+            ->setLanguage('ru')
+            ->useIni(APPLICATION_PATH . 'languages', '', 'lang');
+        $this->writeLog($this->_('home_page'));
     }
 
     public function _initAuth()

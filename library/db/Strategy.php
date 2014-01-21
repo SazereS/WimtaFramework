@@ -1,8 +1,8 @@
 <?php
 
-namespace Library\Db\Strategy;
+namespace Library\Db;
 
-class Prototype extends \PDO
+class Strategy extends \PDO
 {
 
     protected $_prepared = array();
