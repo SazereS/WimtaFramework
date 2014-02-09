@@ -59,16 +59,13 @@ class Mysql extends \Library\Db\Strategy
             . $additional_params['engine'];
         try {
             \Library\Db\Adapter::getInstance()->exec($q);
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             throw new \Library\Db\Exception(
                 'MIGRATION EXCEPTION! ' . $e->getMessage()
             );
         }
     }
 
-    /**
-     * @todo Добавить функционал изменения структуры таблицы
-     */
     public function updateTable($table_name, array $fields)
     {
         $query = 'ALTER TABLE `' . (string) $table_name . '` ';
@@ -101,7 +98,7 @@ class Mysql extends \Library\Db\Strategy
         $query .= ';';
         try{
             \Library\Db\Adapter::getInstance()->exec($query);
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             throw new \Library\Db\Exception('MIGRATION EXCEPTION! ' . $e->getMessage());
         }
     }
@@ -110,7 +107,7 @@ class Mysql extends \Library\Db\Strategy
     {
         try {
             \Library\Db\Adapter::getInstance()->exec('DROP TABLE `' . $table_name . '`');
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             throw new \Library\Db\Exception('MIGRATION EXCEPTION! ' . $e->getMessage());
         }
     }

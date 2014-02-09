@@ -70,6 +70,7 @@ class StackTrace extends Singleton
                 . print_r($this->_stack, true)
                 . '</pre>';
         } else {
+            $stack = array();
             foreach ($this->_stack as $id => $trace) {
                 $args = array();
                 foreach($trace['args'] as $arg){

@@ -86,7 +86,7 @@ class Application
             ->set('router', $this->_router)
             ->set('log', $log);
         $this->registerHelpers();
-        $log->write('Preinitialisation...');
+        $log->write('Pre initialisation...');
         $init->preInit();
         $this->_router->findRoute();
         $log->write('Initialization...');
@@ -109,11 +109,11 @@ class Application
         if (!$this->_controller->view->rendered) {
             $this->_controller->view->render($this->_request->getAction());
         }
-        $log->write('Responsing...');
+        $log->write('Responding...');
         $this->_response
             ->renderLayout($this->_controller->view)
             ->writeContent();
-        $log->write('Postinitialization...');
+        $log->write('Post initialization...');
         $init->postInit();
         $log->writeSuccess('Application successfully executed for ' . $this->getElapsedTime() . ' seconds!');
         if(
