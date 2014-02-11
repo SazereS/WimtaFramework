@@ -28,6 +28,11 @@ class View extends Base
         return $this->_out[$name] = $value;
     }
 
+    public function __toString()
+    {
+        return $this->rendered;
+    }
+
     public function getOut()
     {
         return $this->_out;
