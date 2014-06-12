@@ -34,6 +34,12 @@ class Adapter extends \Library\Singleton
         if ($strategy) {
             $this->setStrategy($strategy);
         }
+        \Library\Base::registerHelper(
+            'quote',
+            function($data){
+                return Adapter::getInstance()->quote($data);
+            }
+        );
         return $this;
     }
 

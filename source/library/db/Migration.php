@@ -2,6 +2,10 @@
 
 namespace Library\Db;
 
+/**
+ * Class Migration
+ * @package Library\Db
+ */
 class Migration
 {
 

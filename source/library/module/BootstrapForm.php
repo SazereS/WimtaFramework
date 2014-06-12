@@ -36,6 +36,7 @@ class BootstrapForm extends \Library\Module
     );
     protected $_label_width   = 2;
     protected $_element_width = 10;
+    protected $_is_vertical = false;
 
     public function __construct()
     {
@@ -95,6 +96,12 @@ class BootstrapForm extends \Library\Module
         return $this;
     }
 
+    public function makeVertical()
+    {
+        $this->_is_vertical = true;
+        return $this;
+    }
+
     /**
      *
      * @param string $type
@@ -107,6 +114,27 @@ class BootstrapForm extends \Library\Module
         $this->_elements[$name] = new $class($name);
         $this->_elements[$name]->setAttributes($attributes);
         return $this->_elements[$name];
+    }
+
+    /**
+     *
+     * @param string $name
+     * @return \Library\Module\BootstrapForm\Element
+     */
+    public function getElement($name)
+    {
+        return $this->_elements[$name];
+    }
+
+    /**
+     *
+     * @param string $name
+     * @return \Library\Module\BootstrapForm
+     */
+    public function removeElement($name)
+    {
+        unset($this->_elements[$name]);
+        return $this;
     }
 
     public function setValues($array)
@@ -156,7 +184,7 @@ class BootstrapForm extends \Library\Module
         }
         $elements = implode('', $elements);
         $attrs_clone          = $this->_attributes;
-        $attrs_clone['class'] = self::FORM_HORIZONTAL . ' ' . $attrs_clone['class'];
+        $attrs_clone['class'] = ($this->_is_vertical ? self::FORM_VERTICAL : self::FORM_HORIZONTAL) . ' ' . $attrs_clone['class'];
         if($attrs_clone['title']){
             $elements = '<legend>' . $attrs_clone['title'] . '</legend>' . $elements;
         }

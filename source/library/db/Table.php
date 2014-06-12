@@ -48,7 +48,10 @@ class Table
 
     /**
      *
-     * @return array of \Library\Db\Table\Row
+     * @param null $where
+     * @param null $order
+     * @param null $limit
+     * @return Row[]
      */
     public function fetchAll($where = NULL, $order = NULL, $limit = NULL)
     {
@@ -67,8 +70,11 @@ class Table
      */
     public function fetchRow($where = NULL, $order = NULL)
     {
-        $temp           = Adapter::getInstance()->fetchRow($where, $order);
+        $temp           = Adapter::getInstance()->fetchRow($this->getTableName(), $where, $order);
         $data           = $temp->fetch(\PDO::FETCH_ASSOC);
+        if(!$data){
+            return false;
+        }
         return $this->_current = new Table\Row($this, $data);
     }
 
@@ -98,7 +104,7 @@ class Table
      */
     public function rowCount($where = NULL, $sort = NULL, $limit = NULL)
     {
-        return Adapter::getInstance()->rowCount($where, $sort, $limit);
+        return Adapter::getInstance()->rowCount($this->_table, $where, $sort, $limit);
     }
 
     /**

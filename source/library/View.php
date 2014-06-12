@@ -41,7 +41,7 @@ class View extends Base
     public function render($file, $out = array())
     {
         $path     = $this->_path . DIRECTORY_SEPARATOR . $file . '.phtml';
-        $response = $this->getRegistry()->response;
+        $response = $this->getResponse();
         if (!file_exists($path) AND ($response->getFormat() == $response::FORMAT_HTML)) {
             throw new View\Exception('Cannot find view file: "' . $path . '"');
         }

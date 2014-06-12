@@ -72,6 +72,11 @@ class Element
         return $this->_name;
     }
 
+    /**
+     * @param string $validator
+     * @param (array|string) $params
+     * @return Element
+     */
     public function addValidator($validator, $params = array())
     {
         $this->_validators[] = array($validator, $params);
@@ -82,17 +87,36 @@ class Element
     {
         $errors = array();
         $validator_obj = \Library\Base::getModule('validator');
+        if(!$validator_obj){
+            \Library\Base::writeLog()->writeError('Cannot validate because Validator module not loaded!');
+            return $errors;
+        }
         foreach ($this->_validators as $validator){
+            if(is_array($validator[1])){
+                foreach ($validator[1] as $k => $v){
+                    if(is_callable($v)){
+                        $validator[1][$k] = $v();
+                    }
+                }
+            } else {
+                if (is_callable($validator[1])) {
+                    $validator[1] = $validator[1]();
+                }
+                $validator[1] = array($validator[1]);
+            }
             if(
                 !call_user_func_array(
                     array(
                         $validator_obj,
                         'validate' . \Library\Base::getRealName($validator[0])
                     ),
-                    array_merge(array($this->getValue()), $validator[1])
+                    array_merge(
+                        array($this->getValue()),
+                        $validator[1]
+                    )
                 )
             ){
-                $errors[] = $validator[0];
+                $errors[] = 'validator-' . $validator[0] . '-error';
             }
         }
         return $errors;
