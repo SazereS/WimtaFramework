@@ -7,6 +7,7 @@ class Row implements \IteratorAggregate
 
     protected $_new = false;
     protected $_cells;
+    protected $_escaped_cells = array();
     protected $_belongs_to;
     protected $_has_many;
     protected $_joined = array('has_many' => array());
@@ -55,6 +56,7 @@ class Row implements \IteratorAggregate
         if ($name == $this->getKeyField()) {
             throw new \Library\Db\Exception('Cannot change primary key value!');
         }
+        unset($this->_escaped_cells[$name]);
         $this->_cells[$name] = $value;
         return $this;
     }
@@ -66,7 +68,7 @@ class Row implements \IteratorAggregate
         } elseif(isset($this->_has_many[$name])){
             if(!$this->_joined['has_many'][$name]){
                 $class = '\\Application\\Models\\'
-                    . \Library\Base::getRealName($this->_has_many[$name]);
+                    . \Library\Base::getRealTableName($this->_has_many[$name]);
                 $model = new $class();
                 $has_many = $this->_table->getJoined();
                 $this->_joined['has_many'][$name] = $model->fetchAll(
@@ -87,11 +89,19 @@ class Row implements \IteratorAggregate
                 return $row;
             }
             $class = '\\Application\\Models\\'
-                . \Library\Base::getRealName($this->_belongs_to[$name]);
+                . \Library\Base::getRealTableName($this->_belongs_to[$name]);
             $model = new $class();
             $row = $model->find($this->_cells[$public_key]);
             return $this->_table->joined_data[$name][$this->_cells[$public_key]] = $row;
         }
+        if(!$this->_escaped_cells[$name]){
+            $this->_escaped_cells[$name] = htmlspecialchars($this->_cells[$name]);
+        }
+        return $this->_escaped_cells[$name];
+    }
+
+    public function getRaw($name)
+    {
         return $this->_cells[$name];
     }
 

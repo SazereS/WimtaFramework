@@ -57,7 +57,7 @@ class StackTrace extends Singleton
         $this->_limit   = (Settings::getInstance()->debug_stacktrace_limit) ? Settings::getInstance()->debug_stack_limit
                 : 10;
         $this->_stack   = debug_backtrace(
-            DEBUG_BACKTRACE_PROVIDE_OBJECT, $this->_limit
+            DEBUG_BACKTRACE_PROVIDE_OBJECT
         );
     }
 
@@ -70,31 +70,38 @@ class StackTrace extends Singleton
                 . print_r($this->_stack, true)
                 . '</pre>';
         } else {
-            foreach ($this->_stack as $id => $trace) {
-                $args = array();
-                foreach($trace['args'] as $arg){
-                    $args[] = print_r($arg, true);
+            $stack = array();
+            if(is_array($this->_stack)){
+                foreach ($this->_stack as $id => $trace) {
+                    $args = array();
+                    foreach($trace['args'] as $arg){
+                        $args[] = print_r($arg, true);
+                    }
+                    $stack[] = sprintf(
+                        $this->_decorators['each'],
+                        sprintf(
+                            $this->_decorators['header'],
+                            $id,
+                            '<b>#' . $id . '</b> ' . $trace['file'] . ' (' . $trace['line'] . ')'
+                        )
+                        . sprintf(
+                            $this->_decorators['body'],
+                            $id,
+                            ($id == 2) ? 'in' : '',
+                            $trace['class']
+                            . $trace['type']
+                            . $trace['function']
+                            . '(<br>'
+                            //. print_r($trace['args'], true)
+                            . implode(',<br>', $args)
+                            . '<br>)'
+                        )
+                    );
                 }
-                $stack[] = sprintf(
-                    $this->_decorators['each'],
-                    sprintf(
-                        $this->_decorators['header'],
-                        $id,
-                        '<b>#' . $id . '</b> ' . $trace['file'] . ' (' . $trace['line'] . ')'
-                    )
-                    . sprintf(
-                        $this->_decorators['body'],
-                        $id,
-                        ($id == 2) ? 'in' : '',
-                        $trace['class']
-                        . $trace['type']
-                        . $trace['function']
-                        . '(<br>'
-                        //. print_r($trace['args'], true)
-                        . implode(',<br>', $args)
-                        . '<br>)'
-                    )
-                );
+            } else {
+                if(!$this->_message){
+                    $this->_message = "UNEXPECTED EXCEPTION! Sorry, but we don't know what's just happened (T_T)";
+                }
             }
             $this->_formatted = sprintf(
                 $this->_decorators['base'],

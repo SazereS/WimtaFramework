@@ -28,6 +28,11 @@ class View extends Base
         return $this->_out[$name] = $value;
     }
 
+    public function __toString()
+    {
+        return $this->rendered;
+    }
+
     public function getOut()
     {
         return $this->_out;
@@ -36,7 +41,7 @@ class View extends Base
     public function render($file, $out = array())
     {
         $path     = $this->_path . DIRECTORY_SEPARATOR . $file . '.phtml';
-        $response = $this->getRegistry()->response;
+        $response = $this->getResponse();
         if (!file_exists($path) AND ($response->getFormat() == $response::FORMAT_HTML)) {
             throw new View\Exception('Cannot find view file: "' . $path . '"');
         }

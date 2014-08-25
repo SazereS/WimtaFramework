@@ -38,9 +38,9 @@ class Application
     public function __construct()
     {
         $this->_start_time = microtime(true);
-        if(session_status() != PHP_SESSION_ACTIVE){
+        //if(session_status() != PHP_SESSION_ACTIVE){
             session_start();
-        }
+        //}
         spl_autoload_register(function($path) {
                 $path      = explode('\\', trim($path, '\\'));
                 $class     = array_pop($path);
@@ -86,7 +86,7 @@ class Application
             ->set('router', $this->_router)
             ->set('log', $log);
         $this->registerHelpers();
-        $log->write('Preinitialisation...');
+        $log->write('Pre initialisation...');
         $init->preInit();
         $this->_router->findRoute();
         $log->write('Initialization...');
@@ -109,7 +109,7 @@ class Application
         if (!$this->_controller->view->rendered) {
             $this->_controller->view->render($this->_request->getAction());
         }
-        $log->write('Responsing...');
+        $log->write('Responding...');
         $this->_response
             ->renderLayout($this->_controller->view)
             ->writeContent();
@@ -240,12 +240,29 @@ class Application
             'getPost',
             function()
             {
-                return $_POST;
+                $post = $_POST;
+                array_walk(
+                    $post,
+                    function(&$elem){
+                        if(is_string($elem)){
+                            $elem = trim($elem);
+                        }
+                    }
+                );
+                return $post;
             }
         );
         Base::registerHelper(
             'getRealName', function($name) {
                 $name = explode('-', $name);
+                foreach($name as $key => $word)
+                    $name[$key][0] = strtoupper($word[0]);
+                return implode('', $name);
+            }
+        );
+        Base::registerHelper(
+            'getRealTableName', function($name) {
+                $name = explode('_', $name);
                 foreach($name as $key => $word)
                     $name[$key][0] = strtoupper($word[0]);
                 return implode('', $name);
@@ -347,6 +364,27 @@ class Application
                     $res .= '</' . $root . '>';
                 }
                 return $res;
+            }
+        );
+        Base::registerHelper(
+            'getRequest',
+            function()
+            {
+                return Registry::getInstance()->request;
+            }
+        );
+        Base::registerHelper(
+            'getResponse',
+            function()
+            {
+                return Registry::getInstance()->response;
+            }
+        );
+        Base::registerHelper(
+            'getParam',
+            function($name)
+            {
+                return Base::getRequest()->params[$name];
             }
         );
     }

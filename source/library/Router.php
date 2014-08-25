@@ -142,8 +142,7 @@ class Router
 
     public function addDefaultRoutes()
     {
-        $this->_routes = array_merge(
-            $this->_routes,
+        foreach(
             array(
                 '{controller}/{id; type: integer}'          => array(
                     'controller' => '{controller}s',
@@ -172,7 +171,11 @@ class Router
                     'action'     => 'index'
                 )
             )
-        );
+            as $route => $params){
+            if(!isset($this->_routes[$route])){
+                $this->_routes[$route] = $params;
+            }
+        }
         return $this;
     }
 

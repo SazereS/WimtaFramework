@@ -124,7 +124,7 @@ class Auth extends \Library\Module{
             }
             if($array[$this->_password_col] == $password){
                 try{
-                    $model = '\\Application\\Models\\' . $this->_table;
+                    $model = '\\Application\\Models\\' . \Library\Base::getRealName($this->_table);
                     $model = new $model();
                     $this->_user_row = new \Library\Db\Table\Row($model, $array);
                 } catch (\Exception $e){
@@ -141,7 +141,7 @@ class Auth extends \Library\Module{
                         $expire = 0;
                     }
                     setcookie('id', $id, $expire, \Library\Base::baseUrl());
-                    setcookie('password', $password, $expire,                              \Library\Base::baseUrl());
+                    setcookie('password', $password, $expire, \Library\Base::baseUrl());
                 }
                 return true;
             }
@@ -187,13 +187,13 @@ class Auth extends \Library\Module{
         \Library\Base::registerHelper(
             'checkAuth',
             function(){
-                return $this->check();
+                return \Library\Base::getModule('auth')->check();
             }
         );
         \Library\Base::registerHelper(
             'getAuth',
             function($key = null){
-                return $this->getUser($key);
+                return \Library\Base::getModule('auth')->getUser($key);
             }
         );
         return $this;

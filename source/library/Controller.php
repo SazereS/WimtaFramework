@@ -27,27 +27,4 @@ class Controller extends Base
         return $this->_vars[$name] = $value;
     }
 
-    /**
-     *
-     * @return \Library\Request
-     */
-    public function getRequest()
-    {
-        return Registry::getInstance()->request;
-    }
-
-    /**
-     *
-     * @return \Library\Response
-     */
-    public function getResponse()
-    {
-        return Registry::getInstance()->response;
-    }
-
-    public function getParam($name)
-    {
-        return $this->getRequest()->params[$name];
-    }
-
 }

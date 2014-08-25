@@ -10,7 +10,7 @@ class Registry extends Singleton
     protected function __construct()
     {
         parent::__construct();
-        Base::registerHelper('getRegistry', function(){ return $this; });
+        Base::registerHelper('getRegistry', function(){ return \Library\Registry::getInstance(); });
     }
 
     public function __set($name, $value)

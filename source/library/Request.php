@@ -30,6 +30,10 @@ class Request
             );
     }
 
+    public function setController($new_controller){
+        $this->params['controller'] = strval($new_controller);
+    }
+
     public function getAction()
     {
         return ($this->params['action'])
@@ -39,6 +43,10 @@ class Request
                 ? Settings::getInstance()->default_action
                 : 'index'
             );
+    }
+
+    public function setAction($new_action){
+        $this->params['action'] = strval($new_action);
     }
 
 }

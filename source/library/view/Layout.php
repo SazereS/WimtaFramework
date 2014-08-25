@@ -18,4 +18,10 @@ class Layout extends \Library\View
         );
     }
 
+    public function renderCustom($file)
+    {
+        $view = new \Library\View();
+        return $view->render($file, $this->_out)->rendered;
+    }
+
 }

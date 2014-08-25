@@ -5,16 +5,19 @@ namespace Library;
 /**
  *
  * @method \Library\Registry getRegistry() Fast registry access
- * @method \Library\Module\$module_name getModule(string $module_name) Returns selected module, if it's already loaded
- * @method string baseUrl(string $url = '') Returns link from root of site
+ * @method \Library\Module\$module_name getModule(\string $module_name) Returns selected module, if it's already loaded
+ * @method string baseUrl(\string $url = '') Returns link from root of site
  * @method boolean isPost() Checking existence of some data sended using POST method
  * @method array getPost() Returns $_POST
- * @method string getRealName(string $name)
+ * @method string getRealName(\string $name)
  * @method array objectsToArray() Recursively converts objects to array
  * @method void page404() Redirects to the 404 page, if isset config parameter "error_page404", else redirects to root of the site
- * @method void redirect(string $to = '') Redirects to the new location
- * @method \Library\Log writeLog(mixed $message = null)
- * @method string xmlEncode(array $array, string $root = 'xmldata', integer $level = 0) Converts array to XML data
+ * @method void redirect(\string $to = '') Redirects to the new location
+ * @method Log writeLog(\mixed $message = null)
+ * @method \string xmlEncode(array $array, \string $root = 'xmldata', \integer $level = 0) Converts array to XML data
+ * @method Request getRequest() Returns Request object
+ * @method \Library\Response getResponse() Returns Response object
+ * @method \string getParam(\string $key) Returns param from URL
  *
  */
 class Base

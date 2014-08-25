@@ -18,13 +18,13 @@ class Module
             Base::registerHelper(
                 'getModule',
                 function($name){
-                    return Registry::getInstance()->modules->{(string) $name};
+                    return Registry::getInstance()->modules->getModule((string) $name);
                 }
             );
         }
     }
 
-    public function __get($name)
+    public function getModule($name)
     {
         return self::$_modules[strtolower($name)];
     }
